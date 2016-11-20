@@ -1,0 +1,7 @@
+doc/
+.yardoc/
+.bundle/
+.idea/
+vendor/
+.DS_Store
+*.lock
