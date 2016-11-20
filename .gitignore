@@ -5,3 +5,4 @@ doc/
 vendor/
 .DS_Store
 *.lock
+*.gem

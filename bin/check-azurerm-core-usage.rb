@@ -42,9 +42,12 @@
 #
 
 require 'sensu-plugin/check/cli'
+require 'sensu-plugins-azurerm'
 require 'azure_mgmt_compute'
 
 class AzureRMCoreUsage < Sensu::Plugin::Check::CLI
+  include SensuPluginsAzureRM
+
   option :tenant_id,
        description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
        short: '-t ID',
@@ -91,8 +94,10 @@ class AzureRMCoreUsage < Sensu::Plugin::Check::CLI
     subscriptionId = config[:subscription_id]
     location = config[:location]
 
-    usageClient = buildClient(tenantId, clientId, clientSecret, subscriptionId)
-    result = retrieveUsageStats(usageClient, location, 'cores')
+    common = Common.new()
+
+    usageClient = common.buildClient(tenantId, clientId, clientSecret, subscriptionId)
+    result = common.retrieveUsageStats(usageClient, location, 'cores')
 
     current_usage = result.current_value
     allowance = result.limit
@@ -114,25 +119,6 @@ class AzureRMCoreUsage < Sensu::Plugin::Check::CLI
   rescue => e
     puts "Error: exception: #{e}"
     critical
-  end
-
-  # TODO: split this method out
-  def buildClient(tenant_id, client_id, secret, subscription_id)
-    token_provider = MsRestAzure::ApplicationTokenProvider.new(tenant_id, client_id, secret)
-    credentials = MsRest::TokenCredentials.new(token_provider)
-    client = Azure::ARM::Compute::ComputeManagementClient.new(credentials)
-    client.subscription_id = subscription_id
-
-    usageClient = Azure::ARM::Compute::UsageOperations.new(client)
-    usageClient
-  end
-
-  # TODO: split this method out
-  def retrieveUsageStats(client, location, name)
-    usageStatistics = client.list(location)
-
-    filteredStatistics = usageStatistics.select { |stat| stat.name.value == name }
-    filteredStatistics[0]
   end
 
 end
