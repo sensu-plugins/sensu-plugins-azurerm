@@ -44,7 +44,7 @@
 require 'sensu-plugin/check/cli'
 require 'azure_mgmt_compute'
 
-class AzureRMCoreUsage < Sensu::Plugin::Check::CLI
+class AzureRMVMUsage < Sensu::Plugin::Check::CLI
   option :tenant_id,
        description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
        short: '-t ID',
