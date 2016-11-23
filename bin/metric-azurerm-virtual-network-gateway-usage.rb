@@ -102,8 +102,8 @@ class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Check::CLI
     timestamp = Time.now.utc.to_i
     scheme = config[:scheme]
     name = [scheme, resource_group_name, name].join('.').tr(' ', '_').tr('{}', '').tr('[]', '')
-    inboundName = [name, "inbound"].join('.').tr(' ', '_').tr('{}', '').tr('[]', '')
-    outboundName = [name, "outbound"].join('.').tr(' ', '_').tr('{}', '').tr('[]', '')
+    inboundName = [name, "inbound"].join('.')
+    outboundName = [name, "outbound"].join('.')
 
     output inboundName, inbound, timestamp
     output outboundName, outbound, timestamp
