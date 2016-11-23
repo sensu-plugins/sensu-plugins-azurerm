@@ -1,8 +1,8 @@
 module SensuPluginsAzureRM
 
-  class Common
+  class ComputeUsage
 
-    def buildClient(tenant_id, client_id, secret, subscription_id)
+    def buildUsageOperationClient(tenant_id, client_id, secret, subscription_id)
       token_provider = MsRestAzure::ApplicationTokenProvider.new(tenant_id, client_id, secret)
       credentials = MsRest::TokenCredentials.new(token_provider)
       client = Azure::ARM::Compute::ComputeManagementClient.new(credentials)
