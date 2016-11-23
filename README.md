@@ -11,6 +11,7 @@
  - check-azurerm-core-usage.rb
  - check-azurerm-virtual-machines-usage.rb
  - check-azurerm-virtual-network-gateway-connected.rb
+ - metric-azurerm-virtual-network-gateway-usage.rb
 
 
 ## Files
@@ -18,6 +19,7 @@
 * /bin/check-azurerm-core-usage.rb
 * /bin/check-azurerm-virtual-machines-usage.rb
 * /bin/check-azurerm-virtual-network-gateway-connected.rb
+* /bin/metric-azurerm-virtual-network-gateway-usage.rb
 
 
 ## Usage
@@ -79,6 +81,26 @@
                              -subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
                              -resourceGroup "resourcegroup"
                              -name "gatewayname"
+```
+
+**metric-azurerm-virtual-network-gateway-usagerb**
+```
+./metric-azurerm-virtual-network-gateway-usage.rb -r "resourcegroup" -n "gatewayname"
+
+./metric-azurerm-virtual-network-gateway-usage.rb
+                          -t "00000000-0000-0000-0000-000000000000"
+                          -c "00000000-0000-0000-0000-000000000000"
+                          -S "00000000-0000-0000-0000-000000000000"
+                          -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                          -r "resourcegroup" -n "gatewayname"
+
+./metric-azurerm-virtual-network-gateway-usage.rb
+                          -tenant "00000000-0000-0000-0000-000000000000"
+                          -client "00000000-0000-0000-0000-000000000000"
+                          -clientSecret "00000000-0000-0000-0000-000000000000"
+                          -subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                          -resourceGroup "resourcegroup"
+                          -name "gatewayname"
 ```
 
 ## Installation
