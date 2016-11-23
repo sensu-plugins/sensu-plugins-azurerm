@@ -45,7 +45,7 @@ require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
 require 'azure_mgmt_compute'
 
-class AzureRMVMUsage < Sensu::Plugin::Check::CLI
+class CheckAzureRMVMUsage < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
 
   option :tenant_id,
@@ -94,9 +94,9 @@ class AzureRMVMUsage < Sensu::Plugin::Check::CLI
     subscriptionId = config[:subscription_id]
     location = config[:location]
 
-    common = Common.new()
+    common = ComputeUsage.new()
 
-    usageClient = common.buildClient(tenantId, clientId, clientSecret, subscriptionId)
+    usageClient = common.buildUsageOperationClient(tenantId, clientId, clientSecret, subscriptionId)
     result = common.retrieveUsageStats(usageClient, location, 'virtualMachines')
 
     current_usage = result.current_value
