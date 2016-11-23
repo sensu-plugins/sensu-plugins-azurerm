@@ -45,7 +45,7 @@ require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
 require 'azure_mgmt_compute'
 
-class AzureRMCoreUsage < Sensu::Plugin::Check::CLI
+class CheckAzureRMCoreUsage < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
 
   option :tenant_id,
