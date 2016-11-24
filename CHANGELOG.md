@@ -8,6 +8,8 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 - Virtual Network Gateways:
   - Added functionality to check Failover connections
   - Made it possible to specify a custom Scheme for Metrics
+- Service Bus:
+  - Added a Metric to expose the the Message Count for a Service Bus Topic
 
 ## 0.0.2 - 2016-11-23
 ### Added
