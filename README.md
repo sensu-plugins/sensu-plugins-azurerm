@@ -12,8 +12,8 @@
  - check-azurerm-virtual-machines-usage.rb
  - check-azurerm-virtual-network-gateway-connected.rb
  - check-azurerm-virtual-network-gateway-failover-connected.rb
+ - metric-azurerm-service-bus-subscription-message-count.rb
  - metric-azurerm-virtual-network-gateway-usage.rb
-
 
 ## Files
 
@@ -21,6 +21,7 @@
 * /bin/check-azurerm-virtual-machines-usage.rb
 * /bin/check-azurerm-virtual-network-gateway-connected.rb
 * /bin/check-azurerm-virtual-network-gateway-failover-connected.rb
+* /bin/metric-azurerm-service-bus-subscription-message-count.rb
 * /bin/metric-azurerm-virtual-network-gateway-usage.rb
 
 
@@ -110,6 +111,36 @@ check-azurerm-virtual-network-gateway-failover-connected.rb
                           -resourceGroup "resourcegroup"
                           -primaryName "gatewayname"
                           -secondaryName "gatewayname"
+```
+
+**metric-azurerm-service-bus-subscription-message-count.rb**
+```
+./metric-azurerm-service-bus-subscription-message-count.rb
+                           --resourceGroup "resourcegroup"
+                           --namespace "namespace"
+                           --topic "topic"
+                           --subscriptionName "subscriptionName"
+
+./metric-azurerm-service-bus-subscription-message-count.rb
+                           -t "00000000-0000-0000-0000-000000000000"
+                           -c "00000000-0000-0000-0000-000000000000"
+                           -S "00000000-0000-0000-0000-000000000000"
+                           -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                           --resourceGroup "resourcegroup"
+                           --namespace "namespace"
+                           --topic "topic"
+                           --subscriptionName "subscriptionName"
+
+./metric-azurerm-service-bus-subscription-message-count.rb
+                           --tenant "00000000-0000-0000-0000-000000000000"
+                           --client "00000000-0000-0000-0000-000000000000"
+                           --clientSecret "00000000-0000-0000-0000-000000000000"
+                           --subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                           --resourceGroup "resourcegroup"
+                           --namespaceName "namespace"
+                           --topicName "topic"
+                           --subscriptionName "subscriptionName"
+                           --customScheme "foo"
 ```
 
 **metric-azurerm-virtual-network-gateway-usagerb**
