@@ -26,12 +26,13 @@
 #                             -r "resourcegroup" -n "gatewayname"
 #
 #   ./metric-azurerm-virtual-network-gateway-usage.rb
-#                             -tenant "00000000-0000-0000-0000-000000000000"
-#                             -client "00000000-0000-0000-0000-000000000000"
-#                             -clientSecret "00000000-0000-0000-0000-000000000000"
-#                             -subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-#                             -resourceGroup "resourcegroup"
-#                             -name "gatewayname"
+#                             --tenant "00000000-0000-0000-0000-000000000000"
+#                             --client "00000000-0000-0000-0000-000000000000"
+#                             --clientSecret "00000000-0000-0000-0000-000000000000"
+#                             --subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+#                             --resourceGroup "resourcegroup"
+#                             --name "gatewayname"
+#                             --customScheme "foo"
 #
 # NOTES:
 #
@@ -41,11 +42,11 @@
 #   for details.
 #
 
-require 'sensu-plugin/check/cli'
+require 'sensu-plugin/metric/cli'
 require 'sensu-plugins-azurerm'
 require 'azure_mgmt_network'
 
-class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Check::CLI
+class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Metric::CLI::Statsd
   include SensuPluginsAzureRM
 
   option :tenant_id,
@@ -82,6 +83,11 @@ class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Check::CLI
        short: '-n NAME',
        long: '--name NAME'
 
+ option :customScheme,
+        description: 'Metric naming scheme, text to prepend to .$parent.$child',
+        long: '--customScheme SCHEME',
+        default: "azurerm.virtualnetworkgateway"
+
   def run
     tenantId = config[:tenant_id]
     clientId = config[:client_id]
@@ -100,14 +106,14 @@ class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Check::CLI
     outbound = result.egress_bytes_transferred
 
     timestamp = Time.now.utc.to_i
-    scheme = config[:scheme]
+    scheme = config[:customScheme]
     name = [scheme, resource_group_name, name].join('.').tr(' ', '_').tr('{}', '').tr('[]', '')
     inboundName = [name, "inbound"].join('.')
     outboundName = [name, "outbound"].join('.')
 
     output inboundName, inbound, timestamp
     output outboundName, outbound, timestamp
-
+    ok
   rescue => e
     puts "Error: exception: #{e}"
     critical

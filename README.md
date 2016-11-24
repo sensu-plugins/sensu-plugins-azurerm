@@ -95,12 +95,13 @@
                           -r "resourcegroup" -n "gatewayname"
 
 ./metric-azurerm-virtual-network-gateway-usage.rb
-                          -tenant "00000000-0000-0000-0000-000000000000"
-                          -client "00000000-0000-0000-0000-000000000000"
-                          -clientSecret "00000000-0000-0000-0000-000000000000"
-                          -subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-                          -resourceGroup "resourcegroup"
-                          -name "gatewayname"
+                          --tenant "00000000-0000-0000-0000-000000000000"
+                          --client "00000000-0000-0000-0000-000000000000"
+                          --clientSecret "00000000-0000-0000-0000-000000000000"
+                          --subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                          --resourceGroup "resourcegroup"
+                          --name "gatewayname"
+                          --customScheme "foo"
 ```
 
 ## Installation
