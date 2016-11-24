@@ -6,6 +6,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ## 0.0.3 - 2016-11-24
 ### Added
 - Virtual Network Gateways:
+  - Added functionality to check Failover connections
   - Made it possible to specify a custom Scheme for Metrics
 
 ## 0.0.2 - 2016-11-23
