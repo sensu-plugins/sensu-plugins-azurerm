@@ -1,9 +1,9 @@
 #! /usr/bin/env ruby
 #
-# metric-azurerm-virtual-network-gateway-usage
+# metric-azurerm-service-bus-subscription-message-count
 #
 # DESCRIPTION:
-#   This plugin exposes the Virtual Network Gateway Ingress & Egress values as Metric's
+#   This plugin exposes the Service Bus Subscription Message Counts as a Metric
 #
 # OUTPUT:
 #   plain-text
@@ -12,26 +12,36 @@
 #   Linux
 #
 # DEPENDENCIES:
-#   gem: azure_mgmt_network
+#   gem: azure_mgmt_service_bus
 #   gem: sensu-plugin
 #
 # USAGE:
-#   ./metric-azurerm-virtual-network-gateway-usage.rb -r "resourcegroup" -n "gatewayname"
 #
-#   ./metric-azurerm-virtual-network-gateway-usage.rb
+#   ./metric-azurerm-service-bus-subscription-message-count.rb
+#                             --resourceGroup "resourcegroup"
+#                             --namespace "namespace"
+#                             --topic "topic"
+#                             --subscriptionName "subscriptionName"
+#
+#   ./metric-azurerm-service-bus-subscription-message-count.rb
 #                             -t "00000000-0000-0000-0000-000000000000"
 #                             -c "00000000-0000-0000-0000-000000000000"
 #                             -S "00000000-0000-0000-0000-000000000000"
 #                             -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-#                             -r "resourcegroup" -n "gatewayname"
+#                             --resourceGroup "resourcegroup"
+#                             --namespace "namespace"
+#                             --topic "topic"
+#                             --subscriptionName "subscriptionName"
 #
-#   ./metric-azurerm-virtual-network-gateway-usage.rb
+#   ./metric-azurerm-service-bus-subscription-message-count.rb
 #                             --tenant "00000000-0000-0000-0000-000000000000"
 #                             --client "00000000-0000-0000-0000-000000000000"
 #                             --clientSecret "00000000-0000-0000-0000-000000000000"
 #                             --subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
 #                             --resourceGroup "resourcegroup"
-#                             --name "gatewayname"
+#                             --namespaceName "namespace"
+#                             --topicName "topic"
+#                             --subscriptionName "subscriptionName"
 #                             --customScheme "foo"
 #
 # NOTES:
@@ -44,9 +54,9 @@
 
 require 'sensu-plugin/metric/cli'
 require 'sensu-plugins-azurerm'
-require 'azure_mgmt_network'
+require 'azure_mgmt_service_bus'
 
-class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Metric::CLI::Statsd
+class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::CLI::Statsd
   include SensuPluginsAzureRM
 
   option :tenant_id,
@@ -75,18 +85,24 @@ class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Metric::CLI::Stat
 
   option :resource_group_name,
        description: 'Azure Resource Group Name',
-       short: '-r RESOURCEGROUP',
        long: '--resourceGroup RESOURCEGROUP'
 
-  option :name,
-       description: 'Azure Virtual Network Connection Gateway Name',
-       short: '-n NAME',
-       long: '--name NAME'
+  option :namespace_name,
+       description: 'Azure Service Bus Namespace Name',
+       long: '--namespaceName NAMESPACE'
+
+  option :topic_name,
+       description: 'Azure Service Bus Topic Name',
+       long: '--topicName TOPIC'
+
+  option :subscription_name,
+       description: 'Azure Service Bus Topic Name',
+       long: '--subscriptionName TOPIC'
 
  option :customScheme,
         description: 'Metric naming scheme, text to prepend to .$parent.$child',
         long: '--customScheme SCHEME',
-        default: "azurerm.virtualnetworkgateway"
+        default: "azurerm.servicebus"
 
   def run
     tenantId = config[:tenant_id]
@@ -95,24 +111,23 @@ class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Metric::CLI::Stat
     subscriptionId = config[:subscription_id]
 
     resource_group_name = config[:resource_group_name]
-    name = config[:name]
+    namespace_name = config[:namespace_name]
+    topic_name = config[:topic_name]
+    subscription_name = config[:subscription_name]
 
-    usage = NetworkUsage.new()
+    usage = ServiceBusUsage.new()
 
-    networkClient = usage.buildVirtualNetworkClient(tenantId, clientId, clientSecret, subscriptionId)
-    result = networkClient.get(resource_group_name, name)
+    serviceBusClient = usage.buildServiceBusClient(tenantId, clientId, clientSecret, subscriptionId)
+    result = serviceBusClient.get(resource_group_name, namespace_name, topic_name, subscription_name)
 
-    inbound = result.ingress_bytes_transferred
-    outbound = result.egress_bytes_transferred
+    count = result.message_count
 
     timestamp = Time.now.utc.to_i
     scheme = config[:customScheme]
-    name = [scheme, resource_group_name, name].join('.').tr(' ', '_').tr('{}', '').tr('[]', '')
-    inboundName = [name, "inbound"].join('.')
-    outboundName = [name, "outbound"].join('.')
+    name = [scheme, resource_group_name, namespace_name, topic_name, subscription_name].join('.').tr(' ', '_').tr('{}', '').tr('[]', '')
+    metricName = [name, "message_count"].join('.')
 
-    output inboundName, inbound, timestamp
-    output outboundName, outbound, timestamp
+    output metricName, count, timestamp
     ok
   rescue => e
     puts "Error: exception: #{e}"

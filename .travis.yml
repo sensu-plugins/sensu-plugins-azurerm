@@ -1,0 +1,20 @@
+language: ruby
+cache:
+- bundler
+install:
+- bundle install
+rvm:
+- 2.1
+- 2.2.1
+- 2.3.0
+notifications:
+  email:
+    recipients:
+    - sensu-plugin@ibuildstuff.co.uk
+    on_success: change
+    on_failure: always
+script:
+- bundle exec rake default
+- gem build sensu-plugins-azurerm.gemspec
+- gem install sensu-plugins-azurerm-*.gem
+

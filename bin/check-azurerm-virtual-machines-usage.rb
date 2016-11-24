@@ -116,9 +116,9 @@ class CheckAzureRMVMUsage < Sensu::Plugin::Check::CLI
       ok message
     end
 
-  #rescue => e
-  #  puts "Error: exception: #{e}"
-  #  critical
+  rescue => e
+    puts "Error: exception: #{e}"
+    critical
   end
 
 end
