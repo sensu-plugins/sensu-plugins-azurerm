@@ -157,11 +157,11 @@ check-azurerm-virtual-network-gateway-failover-connected.rb
 ./metric-azurerm-virtual-network-gateway-usage.rb
                           --tenant "00000000-0000-0000-0000-000000000000"
                           --client "00000000-0000-0000-0000-000000000000"
-                          --clientSecret "00000000-0000-0000-0000-000000000000"
+                          --client_secret "00000000-0000-0000-0000-000000000000"
                           --subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-                          --resourceGroup "resourcegroup"
+                          --resource_group_name "resourcegroup"
                           --name "gatewayname"
-                          --customScheme "foo"
+                          --custom_scheme "foo"
 ```
 
 ## Installation
