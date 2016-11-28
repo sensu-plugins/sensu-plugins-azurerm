@@ -117,7 +117,7 @@ class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::C
 
     usage = ServiceBusUsage.new
 
-    service_bus_client = usage.buildServiceBusClient(tenant_id, client_id, client_secret, subscription_id)
+    service_bus_client = usage.build_service_bus_client(tenant_id, client_id, client_secret, subscription_id)
     result = service_bus_client.get(resource_group_name, namespace_name, topic_name, subscription_name)
 
     count = result.message_count

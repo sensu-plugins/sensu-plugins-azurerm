@@ -99,7 +99,7 @@ class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Metric::CLI::Stat
 
     usage = NetworkUsage.new
 
-    networkClient = usage.buildVirtualNetworkClient(tenant_id, client_id, client_secret, subscription_id)
+    networkClient = usage.build_virtual_network_client(tenant_id, client_id, client_secret, subscription_id)
     result = networkClient.get(resource_group_name, name)
 
     inbound = result.ingress_bytes_transferred

@@ -96,8 +96,8 @@ class CheckAzureRMVMUsage < Sensu::Plugin::Check::CLI
 
     common = ComputeUsage.new()
 
-    usageClient = common.buildUsageOperationClient(tenantId, clientId, clientSecret, subscriptionId)
-    result = common.retrieveUsageStats(usageClient, location, 'virtualMachines')
+    usageClient = common.build_usage_operation_client(tenantId, clientId, clientSecret, subscriptionId)
+    result = common.retrieve_usage_stats(usageClient, location, 'virtualMachines')
 
     current_usage = result.current_value
     allowance = result.limit
