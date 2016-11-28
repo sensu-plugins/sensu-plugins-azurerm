@@ -50,52 +50,52 @@ class CheckAzureRMVirtualNetworkGatewayConnected < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
 
   option :tenant_id,
-       description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
-       short: '-t ID',
-       long: '--tenant ID',
-       default: ENV['ARM_TENANT_ID'] # TODO: can we pull these out from the Check too?
+    description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
+    short: '-t ID',
+    long: '--tenant ID',
+    default: ENV['ARM_TENANT_ID'] # TODO: can we pull these out from the Check too?
 
   option :client_id,
-       description: 'ARM Client ID. Either set ENV[\'ARM_CLIENT_ID\'] or provide it as an option',
-       short: '-c ID',
-       long: '--client ID',
-       default: ENV['ARM_CLIENT_ID']
+    description: 'ARM Client ID. Either set ENV[\'ARM_CLIENT_ID\'] or provide it as an option',
+    short: '-c ID',
+    long: '--client ID',
+    default: ENV['ARM_CLIENT_ID']
 
   option :client_secret,
-       description: 'ARM Client Secret. Either set ENV[\'ARM_CLIENT_SECRET\'] or provide it as an option',
-       short: '-s SECRET',
-       long: '--clientSecret SECRET',
-       default: ENV['ARM_CLIENT_SECRET']
+    description: 'ARM Client Secret. Either set ENV[\'ARM_CLIENT_SECRET\'] or provide it as an option',
+    short: '-s SECRET',
+    long: '--clientSecret SECRET',
+    default: ENV['ARM_CLIENT_SECRET']
 
   option :subscription_id,
-       description: 'ARM Subscription ID',
-       short: '-S ID',
-       long: '--subscription ID',
-       default: ENV['ARM_SUBSCRIPTION_ID']
+    description: 'ARM Subscription ID',
+    short: '-S ID',
+    long: '--subscription ID',
+    default: ENV['ARM_SUBSCRIPTION_ID']
 
   option :resource_group_name,
-       description: 'Azure Resource Group Name',
-       short: '-r RESOURCEGROUP',
-       long: '--resourceGroup RESOURCEGROUP'
+    description: 'Azure Resource Group Name',
+    short: '-r RESOURCEGROUP',
+    long: '--resourceGroup RESOURCEGROUP'
 
   option :name,
-       description: 'Azure Virtual Network Connection Gateway Name',
-       short: '-n NAME',
-       long: '--name NAME'
+    description: 'Azure Virtual Network Connection Gateway Name',
+    short: '-n NAME',
+    long: '--name NAME'
 
   def run
-    tenantId = config[:tenant_id]
-    clientId = config[:client_id]
-    clientSecret = config[:client_secret]
-    subscriptionId = config[:subscription_id]
+    tenant_id = config[:tenant_id]
+    client_id = config[:client_id]
+    client_secret = config[:client_secret]
+    subscription_id = config[:subscription_id]
 
     resource_group_name = config[:resource_group_name]
     name = config[:name]
 
-    usage = NetworkUsage.new()
+    usage = NetworkUsage.new
 
-    networkClient = usage.build_virtual_network_client(tenantId, clientId, clientSecret, subscriptionId)
-    result = networkClient.get(resource_group_name, name)
+    network_client = usage.build_virtual_network_client(tenant_id, client_id, client_secret, subscription_id)
+    result = network_client.get(resource_group_name, name)
 
     connection_state = result.connection_status
     inbound = result.ingress_bytes_transferred
@@ -111,5 +111,4 @@ class CheckAzureRMVirtualNetworkGatewayConnected < Sensu::Plugin::Check::CLI
     puts "Error: exception: #{e}"
     critical
   end
-
 end
