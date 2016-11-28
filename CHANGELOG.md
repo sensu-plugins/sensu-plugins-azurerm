@@ -3,6 +3,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
+## 0.0.4 - 2016-11-28
+### Changed
+- Virtual Network Gateways: Changed the Parameter name to be snake case
+### Fixed
+- Documentation for Virtual Network Gateways
+
 ## 0.0.3 - 2016-11-24
 ### Added
 - Virtual Network Gateways:
