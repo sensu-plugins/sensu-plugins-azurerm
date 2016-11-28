@@ -132,5 +132,4 @@ class CheckAzureRMVirtualNetworkGatewayConnected < Sensu::Plugin::Check::CLI
     puts "Error: exception: #{e}"
     critical
   end
-
 end

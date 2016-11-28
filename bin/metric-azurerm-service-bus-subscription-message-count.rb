@@ -92,8 +92,8 @@ class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::C
          long: '--namespaceName NAMESPACE'
 
   option :topic_name,
-        description: 'Azure Service Bus Topic Name',
-        long: '--topicName TOPIC'
+         description: 'Azure Service Bus Topic Name',
+         long: '--topicName TOPIC'
 
   option :subscription_name,
          description: 'Azure Service Bus Topic Name',
@@ -133,5 +133,4 @@ class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::C
     puts "Error: exception: #{e}"
     critical
   end
-
 end

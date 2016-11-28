@@ -101,7 +101,7 @@ class CheckAzureRMVirtualNetworkGatewayConnected < Sensu::Plugin::Check::CLI
     inbound = result.ingress_bytes_transferred
     outbound = result.egress_bytes_transferred
     message = "State is '#{connection_state}'. Usage is #{inbound} in / #{outbound} out"
-    if result.connection_status.casecmp("connected") == 0
+    if result.connection_status.casecmp('connected') == 0
       ok message
     else
       critical message
