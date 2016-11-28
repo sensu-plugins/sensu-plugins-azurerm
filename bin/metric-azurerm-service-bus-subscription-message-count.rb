@@ -61,48 +61,48 @@ class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::C
 
   option :tenant_id,
     description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
-    short: '-t ID',
-    long: '--tenant ID',
-    default: ENV['ARM_TENANT_ID'] # TODO: can we pull these out from the Check too?
+    short:       '-t ID',
+    long:        '--tenant ID',
+    default:     ENV['ARM_TENANT_ID'] # TODO: can we pull these out from the Check too?
 
   option :client_id,
     description: 'ARM Client ID. Either set ENV[\'ARM_CLIENT_ID\'] or provide it as an option',
-    short: '-c ID',
-    long: '--client ID',
-    default: ENV['ARM_CLIENT_ID']
+    short:       '-c ID',
+    long:        '--client ID',
+    default:     ENV['ARM_CLIENT_ID']
 
   option :client_secret,
     description: 'ARM Client Secret. Either set ENV[\'ARM_CLIENT_SECRET\'] or provide it as an option',
-    short: '-s SECRET',
-    long: '--clientSecret SECRET',
-    default: ENV['ARM_CLIENT_SECRET']
+    short:       '-s SECRET',
+    long:        '--clientSecret SECRET',
+    default:     ENV['ARM_CLIENT_SECRET']
 
   option :subscription_id,
     description: 'ARM Subscription ID',
-    short: '-S ID',
-    long: '--subscription ID',
-    default: ENV['ARM_SUBSCRIPTION_ID']
+    short:       '-S ID',
+    long:        '--subscription ID',
+    default:     ENV['ARM_SUBSCRIPTION_ID']
 
   option :resource_group_name,
     description: 'Azure Resource Group Name',
-    long: '--resourceGroup RESOURCEGROUP'
+    long:        '--resourceGroup RESOURCEGROUP'
 
   option :namespace_name,
     description: 'Azure Service Bus Namespace Name',
-    long: '--namespaceName NAMESPACE'
+    long:        '--namespaceName NAMESPACE'
 
   option :topic_name,
     description: 'Azure Service Bus Topic Name',
-    long: '--topicName TOPIC'
+    long:        '--topicName TOPIC'
 
   option :subscription_name,
     description: 'Azure Service Bus Topic Name',
-    long: '--subscriptionName TOPIC'
+    long:        '--subscriptionName TOPIC'
 
   option :custom_scheme,
     description: 'Metric naming scheme, text to prepend to .$parent.$child',
-    long: '--customScheme SCHEME',
-    default: 'azurerm.servicebus'
+    long:        '--customScheme SCHEME',
+    default:     'azurerm.servicebus'
 
   def run
     tenant_id = config[:tenant_id]
