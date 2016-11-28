@@ -49,43 +49,43 @@ class CheckAzureRMCoreUsage < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
 
   option :tenant_id,
-    description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
-    short: '-t ID',
-    long: '--tenant ID',
-    default: ENV['ARM_TENANT_ID'] # TODO: can we pull these out from the Check too?
+         description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
+         short: '-t ID',
+         long: '--tenant ID',
+         default: ENV['ARM_TENANT_ID'] # TODO: can we pull these out from the Check too?
 
   option :client_id,
-    description: 'ARM Client ID. Either set ENV[\'ARM_CLIENT_ID\'] or provide it as an option',
-    short: '-c ID',
-    long: '--client ID',
-    default: ENV['ARM_CLIENT_ID']
+         description: 'ARM Client ID. Either set ENV[\'ARM_CLIENT_ID\'] or provide it as an option',
+         short: '-c ID',
+         long: '--client ID',
+         default: ENV['ARM_CLIENT_ID']
 
   option :client_secret,
-    description: 'ARM Client Secret. Either set ENV[\'ARM_CLIENT_SECRET\'] or provide it as an option',
-    short: '-s SECRET',
-    long: '--clientSecret SECRET',
-    default: ENV['ARM_CLIENT_SECRET']
+         description: 'ARM Client Secret. Either set ENV[\'ARM_CLIENT_SECRET\'] or provide it as an option',
+         short: '-s SECRET',
+         long: '--clientSecret SECRET',
+         default: ENV['ARM_CLIENT_SECRET']
 
   option :subscription_id,
-    description: 'ARM Subscription ID',
-    short: '-S ID',
-    long: '--subscription ID',
-    default: ENV['ARM_SUBSCRIPTION_ID']
+         description: 'ARM Subscription ID',
+         short: '-S ID',
+         long: '--subscription ID',
+         default: ENV['ARM_SUBSCRIPTION_ID']
 
   option :location,
-    description: 'Azure Location (e.g. westeurope/eastus2)',
-    short: '-l LOCATION',
-    long: '--location LOCATION'
+         description: 'Azure Location (e.g. westeurope/eastus2)',
+         short: '-l LOCATION',
+         long: '--location LOCATION'
 
   option :warning_percentage,
-    description: 'Warning Percentage threshold for filter',
-    short: '-w PERCENTAGE',
-    long: '--warning PERCENTAGE'
+         description: 'Warning Percentage threshold for filter',
+         short: '-w PERCENTAGE',
+         long: '--warning PERCENTAGE'
 
   option :critical_percentage,
-    description: 'Critical Percentage threshold for filter',
-    short: '-c PERCENTAGE',
-    long: '--critical PERCENTAGE'
+         description: 'Critical Percentage threshold for filter',
+         short: '-c PERCENTAGE',
+         long: '--critical PERCENTAGE'
 
   def run
     tenant_id = config[:tenant_id]

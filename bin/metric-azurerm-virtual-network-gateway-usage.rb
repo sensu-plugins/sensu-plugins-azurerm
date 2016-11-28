@@ -50,43 +50,43 @@ class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Metric::CLI::Stat
   include SensuPluginsAzureRM
 
   option :tenant_id,
-    description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
-    short: '-t ID',
-    long: '--tenant ID',
-    default: ENV['ARM_TENANT_ID'] # TODO: can we pull these out from the Check too?
+         description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
+         short: '-t ID',
+         long: '--tenant ID',
+         default: ENV['ARM_TENANT_ID'] # TODO: can we pull these out from the Check too?
 
   option :client_id,
-    description: 'ARM Client ID. Either set ENV[\'ARM_CLIENT_ID\'] or provide it as an option',
-    short: '-c ID',
-    long: '--client ID',
-    default: ENV['ARM_CLIENT_ID']
+         description: 'ARM Client ID. Either set ENV[\'ARM_CLIENT_ID\'] or provide it as an option',
+         short: '-c ID',
+         long: '--client ID',
+         default: ENV['ARM_CLIENT_ID']
 
   option :client_secret,
-    description: 'ARM Client Secret. Either set ENV[\'ARM_CLIENT_SECRET\'] or provide it as an option',
-    short: '-s SECRET',
-    long: '--clientSecret SECRET',
-    default: ENV['ARM_CLIENT_SECRET']
+         description: 'ARM Client Secret. Either set ENV[\'ARM_CLIENT_SECRET\'] or provide it as an option',
+         short: '-s SECRET',
+         long: '--clientSecret SECRET',
+         default: ENV['ARM_CLIENT_SECRET']
 
   option :subscription_id,
-    description: 'ARM Subscription ID',
-    short: '-S ID',
-    long: '--subscription ID',
-    default: ENV['ARM_SUBSCRIPTION_ID']
+         description: 'ARM Subscription ID',
+         short: '-S ID',
+         long: '--subscription ID',
+         default: ENV['ARM_SUBSCRIPTION_ID']
 
   option :resource_group_name,
-    description: 'Azure Resource Group Name',
-    short: '-r RESOURCEGROUP',
-    long: '--resourceGroup RESOURCEGROUP'
+         description: 'Azure Resource Group Name',
+         short: '-r RESOURCEGROUP',
+         long: '--resourceGroup RESOURCEGROUP'
 
   option :name,
-    description: 'Azure Virtual Network Connection Gateway Name',
-    short: '-n NAME',
-    long: '--name NAME'
+         description: 'Azure Virtual Network Connection Gateway Name',
+         short: '-n NAME',
+         long: '--name NAME'
 
   option :custom_scheme,
-    description: 'Metric naming scheme, text to prepend to .$parent.$child',
-    long: '--custom_scheme SCHEME',
-    default: 'azurerm.virtualnetworkgateway'
+         description: 'Metric naming scheme, text to prepend to .$parent.$child',
+         long: '--custom_scheme SCHEME',
+         default: 'azurerm.virtualnetworkgateway'
 
   def run
     tenant_id = config[:tenant_id]
