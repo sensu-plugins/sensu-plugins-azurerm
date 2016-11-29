@@ -10,6 +10,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
   - Network Interfaces
   - Network Security Groups
   - Public IP Addresses
+  - Route Tables
   - Static Public IP Addresses
   - Virtual Networks
 ### Changed
