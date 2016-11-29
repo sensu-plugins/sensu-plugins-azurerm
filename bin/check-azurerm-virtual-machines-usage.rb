@@ -28,7 +28,7 @@
 #   ./check-azurerm-virtual-machines-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
 #                                             -client_id "00000000-0000-0000-0000-000000000000"
 #                                             -client_secret "00000000-0000-0000-0000-000000000000"
-#                                             -subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+#                                             -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
 #                                             -location "westeurope"
 #                                             -warning_percentage 80
 #                                             -critical_percentage 90

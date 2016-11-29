@@ -35,7 +35,7 @@
 #                             -tenant "00000000-0000-0000-0000-000000000000"
 #                             -client "00000000-0000-0000-0000-000000000000"
 #                             -client_secret "00000000-0000-0000-0000-000000000000"
-#                             -subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+#                             -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
 #                             -resourceGroup "resourcegroup"
 #                             -primary_name "gatewayname"
 #                             -secondary_name "gatewayname"
