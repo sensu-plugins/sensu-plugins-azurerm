@@ -56,6 +56,25 @@
                               -critical_percentage 90
 ```
 
+**check-azurerm-load-balancers-usage.rb**
+```
+./check-azurerm-load-balancers-usage.rb -l "westeurope" -w 80 -c 90
+
+./check-azurerm-load-balancers-usage.rb -t "00000000-0000-0000-0000-000000000000"
+                                        -c "00000000-0000-0000-0000-000000000000"
+                                        -S "00000000-0000-0000-0000-000000000000"
+                                        -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                                        -l "eastus2" -w 80 -c 90
+
+./check-azurerm-load-balancers-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
+                                        -client_id "00000000-0000-0000-0000-000000000000"
+                                        -client_secret "00000000-0000-0000-0000-000000000000"
+                                        -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                                        -location "westeurope"
+                                        -warning_percentage 80
+                                        -critical_percentage 90
+```
+
 **check-azurerm-network-interfaces-usage.rb**
 ```
 ./check-azurerm-network-interfaces-usage.rb -l "westeurope" -w 80 -c 90
