@@ -5,8 +5,9 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 
 ## 0.0.4 - (Unreleased)
 ### Added
-- Check for the Virtual Network quota
+- Check for the Network Security Groups quota
 - Check for the Static Public IP's quota
+- Check for the Virtual Network quota
 ### Changed
 - Refactoring to match the linting guidelines.
 ### Fixed
