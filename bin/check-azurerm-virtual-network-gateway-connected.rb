@@ -92,9 +92,7 @@ class CheckAzureRMVirtualNetworkGatewayConnected < Sensu::Plugin::Check::CLI
     resource_group_name = config[:resource_group_name]
     name = config[:name]
 
-    usage = NetworkUsage.new
-
-    network_client = usage.build_virtual_network_gateways_client(tenant_id, client_id, client_secret, subscription_id)
+    network_client = NetworkUsage.new.build_virtual_network_gateways_client(tenant_id, client_id, client_secret, subscription_id)
     result = network_client.get(resource_group_name, name)
 
     connection_state = result.connection_status

@@ -94,10 +94,8 @@ class CheckAzureRMCoreUsage < Sensu::Plugin::Check::CLI
     subscription_id = config[:subscription_id]
     location = config[:location]
 
-    common = ComputeUsage.new
-
-    usage_client = common.build_usage_operation_client(tenant_id, client_id, client_secret, subscription_id)
-    result = common.retrieve_usage_stats(usage_client, location, 'cores')
+    usage_client = ComputeUsage.new.build_usage_operation_client(tenant_id, client_id, client_secret, subscription_id)
+    result = Common.new.retrieve_usage_stats(usage_client, location, 'cores')
 
     current_usage = result.current_value
     allowance = result.limit

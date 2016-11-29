@@ -9,12 +9,5 @@ module SensuPluginsAzureRM
       usage_client = Azure::ARM::Compute::UsageOperations.new(client)
       usage_client
     end
-
-    def retrieve_usage_stats(client, location, name)
-      usage_statistics = client.list(location)
-
-      filtered_statistics = usage_statistics.select { |stat| stat.name.value == name }
-      filtered_statistics[0]
-    end
   end
 end
