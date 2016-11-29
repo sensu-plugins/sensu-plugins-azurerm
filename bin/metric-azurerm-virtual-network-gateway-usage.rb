@@ -44,7 +44,6 @@
 
 require 'sensu-plugin/metric/cli'
 require 'sensu-plugins-azurerm'
-require 'azure_mgmt_network'
 
 class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Metric::CLI::Statsd
   include SensuPluginsAzureRM

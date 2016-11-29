@@ -1,3 +1,5 @@
+require 'azure_mgmt_compute'
+
 module SensuPluginsAzureRM
   class ComputeUsage
     def build_usage_operation_client(tenant_id, client_id, secret, subscription_id)

@@ -44,7 +44,6 @@
 
 require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
-require 'azure_mgmt_network'
 
 class CheckAzureRMVirtualNetworkGatewayConnected < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM

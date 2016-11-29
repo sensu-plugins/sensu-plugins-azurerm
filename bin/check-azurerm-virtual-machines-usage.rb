@@ -43,7 +43,6 @@
 
 require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
-require 'azure_mgmt_compute'
 
 class CheckAzureRMVMUsage < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
