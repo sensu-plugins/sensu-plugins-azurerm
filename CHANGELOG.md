@@ -7,6 +7,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ### Added
 - Checks for the following Quota's:
   - Dv2 Family Cores
+  - F Family Cores
   - Load Balancers
   - Network Interfaces
   - Network Security Groups
