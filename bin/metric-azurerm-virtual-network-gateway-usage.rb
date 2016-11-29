@@ -32,7 +32,7 @@
 #                             --subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
 #                             --resource_group_name "resourcegroup"
 #                             --name "gatewayname"
-#                             --custom_scheme "foo"
+#                             --customScheme "foo"
 #
 # NOTES:
 #
@@ -85,7 +85,7 @@ class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Metric::CLI::Stat
 
   option :custom_scheme,
          description: 'Metric naming scheme, text to prepend to .$parent.$child',
-         long: '--custom_scheme SCHEME',
+         long: '--customScheme SCHEME',
          default: 'azurerm.virtualnetworkgateway'
 
   def run

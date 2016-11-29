@@ -158,10 +158,10 @@ check-azurerm-virtual-network-gateway-failover-connected.rb
                           --tenant "00000000-0000-0000-0000-000000000000"
                           --client "00000000-0000-0000-0000-000000000000"
                           --client_secret "00000000-0000-0000-0000-000000000000"
-                          --subscription_id "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-                          --resource_group_name "resourcegroup"
+                          --subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                          --resourceGroup "resourcegroup"
                           --name "gatewayname"
-                          --custom_scheme "foo"
+                          --customScheme "foo"
 ```
 
 ## Installation
