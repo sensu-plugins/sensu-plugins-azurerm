@@ -6,6 +6,9 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ## 0.0.4 - (Unreleased)
 ### Added
 - Checks for the following Quota's:
+  - D Family Cores
+  - DS Family Cores
+  - DSv2 Family Cores
   - Dv2 Family Cores
   - F Family Cores
   - FS Family Cores

@@ -9,6 +9,9 @@
 ## Functionality
 
  - check-azurerm-core-usage.rb
+ - check-azurerm-cores-d-usage.rb
+ - check-azurerm-cores-ds-usage.rb
+ - check-azurerm-cores-dsv2-usage.rb
  - check-azurerm-cores-dv2-usage.rb
  - check-azurerm-cores-f-usage.rb
  - check-azurerm-cores-fs-usage.rb
@@ -27,6 +30,9 @@
 ## Files
 
 * /bin/check-azurerm-core-usage.rb
+* /bin/check-azurerm-cores-d-usage.rb
+* /bin/check-azurerm-cores-ds-usage.rb
+* /bin/check-azurerm-cores-dsv2-usage.rb
 * /bin/check-azurerm-cores-dv2-usage.rb
 * /bin/check-azurerm-cores-f-usage.rb
 * /bin/check-azurerm-cores-fs-usage.rb
@@ -62,6 +68,63 @@
                               -location "westeurope"
                               -warning_percentage 80
                               -critical_percentage 90
+```
+
+**check-azurerm-cores-d-usage.rb**
+```
+./check-azurerm-cores-d-usage.rb -l "westeurope" -w 80 -c 90
+
+./check-azurerm-cores-d-usage.rb -t "00000000-0000-0000-0000-000000000000"
+                                 -c "00000000-0000-0000-0000-000000000000"
+                                 -S "00000000-0000-0000-0000-000000000000"
+                                 -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                                 -l "eastus2" -w 80 -c 90
+
+./check-azurerm-cores-d-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
+                                 -client_id "00000000-0000-0000-0000-000000000000"
+                                 -client_secret "00000000-0000-0000-0000-000000000000"
+                                 -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                                 -location "westeurope"
+                                 -warning_percentage 80
+                                 -critical_percentage 90
+```
+
+**check-azurerm-cores-ds-usage.rb**
+```
+./check-azurerm-cores-ds-usage.rb -l "westeurope" -w 80 -c 90
+
+./check-azurerm-cores-ds-usage.rb -t "00000000-0000-0000-0000-000000000000"
+                                  -c "00000000-0000-0000-0000-000000000000"
+                                  -S "00000000-0000-0000-0000-000000000000"
+                                  -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                                  -l "eastus2" -w 80 -c 90
+
+./check-azurerm-cores-ds-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
+                                  -client_id "00000000-0000-0000-0000-000000000000"
+                                  -client_secret "00000000-0000-0000-0000-000000000000"
+                                  -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                                  -location "westeurope"
+                                  -warning_percentage 80
+                                  -critical_percentage 90
+```
+
+**check-azurerm-cores-dsv2-usage.rb**
+```
+./check-azurerm-cores-dsv2-usage.rb -l "westeurope" -w 80 -c 90
+
+./check-azurerm-cores-dsv2-usage.rb -t "00000000-0000-0000-0000-000000000000"
+                                    -c "00000000-0000-0000-0000-000000000000"
+                                    -S "00000000-0000-0000-0000-000000000000"
+                                    -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                                    -l "eastus2" -w 80 -c 90
+
+./check-azurerm-cores-dsv2-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
+                                    -client_id "00000000-0000-0000-0000-000000000000"
+                                    -client_secret "00000000-0000-0000-0000-000000000000"
+                                    -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                                    -location "westeurope"
+                                    -warning_percentage 80
+                                    -critical_percentage 90
 ```
 
 **check-azurerm-cores-dv2-usage.rb**
