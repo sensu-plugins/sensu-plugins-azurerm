@@ -5,9 +5,11 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 
 ## 0.0.4 - (Unreleased)
 ### Added
-- Check for the Network Security Groups quota
-- Check for the Static Public IP's quota
-- Check for the Virtual Network quota
+- Checks for the following Quota's:
+  - Public IP Addresses
+  - Network Security Groups
+  - Static Public IP Addresses
+  - Virtual Networks
 ### Changed
 - Refactoring to match the linting guidelines.
 ### Fixed

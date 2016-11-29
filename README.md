@@ -10,6 +10,7 @@
 
  - check-azurerm-core-usage.rb
  - check-azurerm-network-security-groups-usage.rb
+ - check-azurerm-public-ip-addresses-usage.rb
  - check-azurerm-static-public-ip-addresses-usage.rb
  - check-azurerm-virtual-machines-usage.rb
  - check-azurerm-virtual-network-gateway-connected.rb
@@ -22,6 +23,7 @@
 
 * /bin/check-azurerm-core-usage.rb
 * /bin/check-azurerm-network-security-groups-usage.rb
+* /bin/check-azurerm-public-ip-addresses-usage.rb
 * /bin/check-azurerm-static-public-ip-addresses-usage.rb
 * /bin/check-azurerm-virtual-machines-usage.rb
 * /bin/check-azurerm-virtual-network-gateway-connected.rb
@@ -69,6 +71,25 @@
                                                  -location "westeurope"
                                                  -warning_percentage 80
                                                  -critical_percentage 90
+```
+
+**check-azurerm-public-ip-addresses-usage.rb**
+```
+./check-azurerm-public-ip-addresses-usage.rb -l "westeurope" -w 80 -c 90
+
+./check-azurerm-public-ip-addresses-usage.rb -t "00000000-0000-0000-0000-000000000000"
+                                             -c "00000000-0000-0000-0000-000000000000"
+                                             -S "00000000-0000-0000-0000-000000000000"
+                                             -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                                             -l "eastus2" -w 80 -c 90
+
+./check-azurerm-public-ip-addresses-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
+                                             -client_id "00000000-0000-0000-0000-000000000000"
+                                             -client_secret "00000000-0000-0000-0000-000000000000"
+                                             -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                                             -location "westeurope"
+                                             -warning_percentage 80
+                                             -critical_percentage 90
 ```
 
 **check-azurerm-static-public-ip-addresses-usage.rb**
