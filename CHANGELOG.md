@@ -5,7 +5,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 
 ## 0.0.4 - 2016-11-28
 ### Changed
-- Virtual Network Gateways: Changed the Parameter name to be snake case
+- Refactoring to match the linting guidelines.
 ### Fixed
 - Documentation for Virtual Network Gateways
 
