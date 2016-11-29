@@ -3,7 +3,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
-## 0.0.4 - 2016-11-28
+## 0.0.4 - (Unreleased)
+### Added
+- Check for the Virtual Network Quota
 ### Changed
 - Refactoring to match the linting guidelines.
 ### Fixed
