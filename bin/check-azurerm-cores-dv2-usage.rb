@@ -1,9 +1,9 @@
 #! /usr/bin/env ruby
 #
-# check-azurerm-static-public-ip-addresses-usage
+# check-azurerm-cores-dv2-usage
 #
 # DESCRIPTION:
-#   This plugin checks the number of Static Public IP Addresses allocated and available in a Region in Azure.
+#   This plugin checks the number of Dv2 Family CPU Cores allocated and available in a Region in Azure.
 #   Warning and Critical Percentage thresholds may be set as needed.
 #
 # OUTPUT:
@@ -13,25 +13,25 @@
 #   Linux
 #
 # DEPENDENCIES:
-#   gem: azure_mgmt_network
+#   gem: azure_mgmt_compute
 #   gem: sensu-plugin
 #
 # USAGE:
-#   ./check-azurerm-static-public-ip-addresses-usage.rb -l "westeurope" -w 80 -c 90
+#   ./check-azurerm-cores-dv2-usage.rb -l "westeurope" -w 80 -c 90
 #
-#   ./check-azurerm-static-public-ip-addresses-usage.rb -t "00000000-0000-0000-0000-000000000000"
-#                                                       -c "00000000-0000-0000-0000-000000000000"
-#                                                       -S "00000000-0000-0000-0000-000000000000"
-#                                                       -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-#                                                       -l "eastus2" -w 80 -c 90
+#   ./check-azurerm-cores-dv2-usage.rb -t "00000000-0000-0000-0000-000000000000"
+#                                      -c "00000000-0000-0000-0000-000000000000"
+#                                      -S "00000000-0000-0000-0000-000000000000"
+#                                      -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+#                                      -l "eastus2" -w 80 -c 90
 #
-#   ./check-azurerm-static-public-ip-addresses-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
-#                                                       -client_id "00000000-0000-0000-0000-000000000000"
-#                                                       -client_secret "00000000-0000-0000-0000-000000000000"
-#                                                       -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-#                                                       -location "westeurope"
-#                                                       -warning_percentage 80
-#                                                       -critical_percentage 90
+#   ./check-azurerm-cores-dv2-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
+#                                      -client_id "00000000-0000-0000-0000-000000000000"
+#                                      -client_secret "00000000-0000-0000-0000-000000000000"
+#                                      -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+#                                      -location "westeurope"
+#                                      -warning_percentage 80
+#                                      -critical_percentage 90
 #
 # NOTES:
 #
@@ -44,7 +44,7 @@
 require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
 
-class CheckAzureRMStaticPublicIPAddressesUsage < Sensu::Plugin::Check::CLI
+class CheckAzureRMCoresDv2Usage < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
 
   option :tenant_id,
@@ -93,15 +93,15 @@ class CheckAzureRMStaticPublicIPAddressesUsage < Sensu::Plugin::Check::CLI
     subscription_id = config[:subscription_id]
     location = config[:location]
 
-    usage_client = NetworkUsage.new.build_usage_client(tenant_id, client_id, client_secret, subscription_id)
-    result = Common.new.retrieve_usage_stats(usage_client, location, 'StaticPublicIPAddresses')
+    usage_client = ComputeUsage.new.build_usage_operation_client(tenant_id, client_id, client_secret, subscription_id)
+    result = Common.new.retrieve_usage_stats(usage_client, location, 'standardDv2Family')
 
     current_usage = result.current_value
     allowance = result.limit
     critical_percentage = config[:critical_percentage].to_f
     warning_percentage = config[:warning_percentage].to_f
 
-    message = "Current usage: #{current_usage} of #{allowance} Static IP Addresses"
+    message = "Current usage: #{current_usage} of #{allowance} Dv2 Family Cores"
 
     percentage_used = (current_usage.to_f / allowance.to_f) * 100
 
