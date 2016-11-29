@@ -1,9 +1,9 @@
 #! /usr/bin/env ruby
 #
-# check-azurerm-virtual-networks-usage
+# check-azurerm-static-public-ip-addresses-usage
 #
 # DESCRIPTION:
-#   This plugin checks the number of Virtual Networks allocated and available in a Region in Azure.
+#   This plugin checks the number of Static Public IP Addresses allocated and available in a Region in Azure.
 #   Warning and Critical Percentage thresholds may be set as needed.
 #
 # OUTPUT:
@@ -17,21 +17,21 @@
 #   gem: sensu-plugin
 #
 # USAGE:
-#   ./check-azurerm-virtual-networks-usage.rb -l "westeurope" -w 80 -c 90
+#   ./check-azurerm-static-public-ip-addresses-usage.rb -l "westeurope" -w 80 -c 90
 #
-#   ./check-azurerm-virtual-networks-usage.rb -t "00000000-0000-0000-0000-000000000000"
-#                                             -c "00000000-0000-0000-0000-000000000000"
-#                                             -S "00000000-0000-0000-0000-000000000000"
-#                                             -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-#                                             -l "eastus2" -w 80 -c 90
+#   ./check-azurerm-static-public-ip-addresses-usage.rb -t "00000000-0000-0000-0000-000000000000"
+#                                                       -c "00000000-0000-0000-0000-000000000000"
+#                                                       -S "00000000-0000-0000-0000-000000000000"
+#                                                       -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+#                                                       -l "eastus2" -w 80 -c 90
 #
-#   ./check-azurerm-virtual-networks-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
-#                                             -client_id "00000000-0000-0000-0000-000000000000"
-#                                             -client_secret "00000000-0000-0000-0000-000000000000"
-#                                             -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-#                                             -location "westeurope"
-#                                             -warning_percentage 80
-#                                             -critical_percentage 90
+#   ./check-azurerm-static-public-ip-addresses-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
+#                                                       -client_id "00000000-0000-0000-0000-000000000000"
+#                                                       -client_secret "00000000-0000-0000-0000-000000000000"
+#                                                       -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+#                                                       -location "westeurope"
+#                                                       -warning_percentage 80
+#                                                       -critical_percentage 90
 #
 # NOTES:
 #
@@ -44,7 +44,7 @@
 require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
 
-class CheckAzureRMVirtualNetworksUsage < Sensu::Plugin::Check::CLI
+class CheckAzureRMStaticPublicIPAddressesUsage < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
 
   option :tenant_id,
@@ -94,14 +94,14 @@ class CheckAzureRMVirtualNetworksUsage < Sensu::Plugin::Check::CLI
     location = config[:location]
 
     usage_client = NetworkUsage.new.build_usage_client(tenant_id, client_id, client_secret, subscription_id)
-    result = Common.new.retrieve_usage_stats(usage_client, location, 'VirtualNetworks')
+    result = Common.new.retrieve_usage_stats(usage_client, location, 'StaticPublicIPAddresses')
 
     current_usage = result.current_value
     allowance = result.limit
     critical_percentage = config[:critical_percentage].to_f
     warning_percentage = config[:warning_percentage].to_f
 
-    message = "Current usage: #{current_usage} of #{allowance} Virtual Networks"
+    message = "Current usage: #{current_usage} of #{allowance} Static IP Addresses"
 
     percentage_used = (current_usage.to_f / allowance.to_f) * 100
 
