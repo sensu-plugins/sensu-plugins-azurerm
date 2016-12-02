@@ -2,7 +2,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'date'
-require_relative 'lib/sensu-plugins-azurerm'
+require 'sensu-plugins-azurerm'
 
 Gem::Specification.new do |s|
   s.authors                = ['Tom Harvey']
