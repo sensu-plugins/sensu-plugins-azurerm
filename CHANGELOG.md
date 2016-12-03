@@ -3,6 +3,27 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
+## 0.0.4 - 2016-12-04
+### Added
+- Checks for the following Quota's:
+  - D Family Cores
+  - DS Family Cores
+  - DSv2 Family Cores
+  - Dv2 Family Cores
+  - F Family Cores
+  - FS Family Cores
+  - Load Balancers
+  - Network Interfaces
+  - Network Security Groups
+  - Public IP Addresses
+  - Route Tables
+  - Static Public IP Addresses
+  - Virtual Networks
+### Changed
+- Refactoring to match the linting guidelines.
+### Fixed
+- Documentation for Virtual Network Gateways
+
 ## 0.0.3 - 2016-11-24
 ### Added
 - Virtual Network Gateways:

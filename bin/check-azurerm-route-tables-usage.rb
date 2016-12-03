@@ -1,9 +1,9 @@
 #! /usr/bin/env ruby
 #
-# check-azurerm-virtual-machines-usage
+# check-azurerm-route-tables-usage
 #
 # DESCRIPTION:
-#   This plugin checks the number of Virtual Machines allocated and available in a Region in Azure.
+#   This plugin checks the number of Route Tables allocated and available in a Region in Azure.
 #   Warning and Critical Percentage thresholds may be set as needed.
 #
 # OUTPUT:
@@ -13,25 +13,25 @@
 #   Linux
 #
 # DEPENDENCIES:
-#   gem: azure_mgmt_compute
+#   gem: azure_mgmt_network
 #   gem: sensu-plugin
 #
 # USAGE:
-#   ./check-azurerm-virtual-machines-usage.rb -l "westeurope" -w 80 -c 90
+#   ./check-azurerm-route-tables-usage.rb -l "westeurope" -w 80 -c 90
 #
-#   ./check-azurerm-virtual-machines-usage.rb -t "00000000-0000-0000-0000-000000000000"
-#                                             -c "00000000-0000-0000-0000-000000000000"
-#                                             -S "00000000-0000-0000-0000-000000000000"
-#                                             -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-#                                             -l "eastus2" -w 80 -c 90
+#   ./check-azurerm-route-tables-usage.rb -t "00000000-0000-0000-0000-000000000000"
+#                                         -c "00000000-0000-0000-0000-000000000000"
+#                                         -S "00000000-0000-0000-0000-000000000000"
+#                                         -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+#                                         -l "eastus2" -w 80 -c 90
 #
-#   ./check-azurerm-virtual-machines-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
-#                                             -client_id "00000000-0000-0000-0000-000000000000"
-#                                             -client_secret "00000000-0000-0000-0000-000000000000"
-#                                             -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-#                                             -location "westeurope"
-#                                             -warning_percentage 80
-#                                             -critical_percentage 90
+#   ./check-azurerm-route-tables-usage.rb -tenant "00000000-0000-0000-0000-000000000000"
+#                                         -client_id "00000000-0000-0000-0000-000000000000"
+#                                         -client_secret "00000000-0000-0000-0000-000000000000"
+#                                         -subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+#                                         -location "westeurope"
+#                                         -warning_percentage 80
+#                                         -critical_percentage 90
 #
 # NOTES:
 #
@@ -41,11 +41,11 @@
 #   for details.
 #
 
-require 'azure_mgmt_compute'
+require 'azure_mgmt_network'
 require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
 
-class CheckAzureRMVMUsage < Sensu::Plugin::Check::CLI
+class CheckAzureRMRouteTablesUsage < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
 
   option :tenant_id,
@@ -94,15 +94,15 @@ class CheckAzureRMVMUsage < Sensu::Plugin::Check::CLI
     subscription_id = config[:subscription_id]
     location = config[:location]
 
-    usage_client = ComputeUsage.new.build_usage_operation_client(tenant_id, client_id, client_secret, subscription_id)
-    result = Common.new.retrieve_usage_stats(usage_client, location, 'virtualMachines')
+    usage_client = NetworkUsage.new.build_usage_client(tenant_id, client_id, client_secret, subscription_id)
+    result = Common.new.retrieve_usage_stats(usage_client, location, 'RouteTables')
 
     current_usage = result.current_value
     allowance = result.limit
     critical_percentage = config[:critical_percentage].to_f
     warning_percentage = config[:warning_percentage].to_f
 
-    message = "Current usage: #{current_usage} of #{allowance} VMs"
+    message = "Current usage: #{current_usage} of #{allowance} Route Tables"
 
     percentage_used = (current_usage.to_f / allowance.to_f) * 100
 
