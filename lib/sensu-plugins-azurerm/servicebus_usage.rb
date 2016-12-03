@@ -1,5 +1,3 @@
-require 'azure_mgmt_service_bus'
-
 module SensuPluginsAzureRM
   class ServiceBusUsage
     def build_service_bus_client(tenant_id, client_id, secret, subscription_id)

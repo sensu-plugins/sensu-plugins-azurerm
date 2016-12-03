@@ -52,6 +52,7 @@
 #   for details.
 #
 
+require 'azure_mgmt_service_bus'
 require 'sensu-plugin/metric/cli'
 require 'sensu-plugins-azurerm'
 

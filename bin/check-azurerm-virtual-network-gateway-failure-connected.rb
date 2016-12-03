@@ -48,6 +48,7 @@
 #   for details.
 #
 
+require 'azure_mgmt_network'
 require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
 

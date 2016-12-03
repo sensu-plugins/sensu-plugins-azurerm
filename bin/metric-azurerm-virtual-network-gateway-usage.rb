@@ -42,6 +42,7 @@
 #   for details.
 #
 
+require 'azure_mgmt_network'
 require 'sensu-plugin/metric/cli'
 require 'sensu-plugins-azurerm'
 

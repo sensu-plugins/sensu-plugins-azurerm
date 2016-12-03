@@ -41,6 +41,7 @@
 #   for details.
 #
 
+require 'azure_mgmt_compute'
 require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
 

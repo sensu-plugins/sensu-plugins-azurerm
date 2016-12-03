@@ -1,5 +1,3 @@
-require 'azure_mgmt_network'
-
 module SensuPluginsAzureRM
   class NetworkUsage
     def build_usage_client(tenant_id, client_id, secret, subscription_id)
