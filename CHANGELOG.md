@@ -3,7 +3,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
-## 0.0.4 - 2016-11-29
+## 0.0.4 - 2016-12-04
 ### Added
 - Checks for the following Quota's:
   - D Family Cores
