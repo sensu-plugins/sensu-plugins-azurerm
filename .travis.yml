@@ -18,3 +18,15 @@ script:
 - gem build sensu-plugins-azurerm.gemspec
 - gem install sensu-plugins-azurerm-*.gem
 
+deploy:
+  provider: rubygems
+  api_key:
+    secure: "V/Py5pAb6/47vF/aBbhMRFZjPSwlvuqK4E2KiBsfII9qERq3DQxQW5s/u361XGlzhCjic08c6FyppZG6+mDQhemqkZG8mOb6Nr/8xuUXGi5blpFERfmxRysGMXGsNsGfvmBuQtgpWxzjek8amXRFFdCPL+II6tVrFOpQnZJMxfJ4cqXdnasCA3TzhXCzO9V0QA7JzjmKtjk7bxcd4Zjd2fW5AC6T3k1gXuBXhwSbiqgh+iDBTMl8IC9u7BCPRdNhPYuRbwYWce9xzEwDgSLkqqOwCOYyb9uPF4qeNAMdmmGCeNLK9EcKPA8GhjvPcq5995HXT5j/5yd2/CTpzc6XuFLEn9LQC20cYBCDSKB1Bu8Q25PAXysRHNkdYH6T5plD8F3dm00LQowphB8C14FKagEj/S5Ae/pr2g8EfbC+/P2LvLOq4i9oD7sqzceQO9YPVheyuL67AYllihJtFAYEmtU0lKhHZ6CKZSwvl59P62ir1ne8S2695BeZhDwB56Kbu6/uNoHzmr6yVFlc5VxbL/XY8D5GA1zPMzVGtrQWhL8W1g0Cn9oJKWJiQa5aET7v0xZneMxDqD6PcjiaQzR/CnC+MbEjfvA6F1Y9O/Pr/UTSfTLu/EqZxSrnhup2BwvrfLoORgIkJunIoyERvkuSrPxGliYG8jQd1R6+RBbtlyo="
+  gem: sensu-plugins-storm
+  on:
+    tags: true
+    rvm: 2.0
+    rvm: 2.1
+    rvm: 2.2
+    rvm: 2.3.0
+    repo: tombuildsstuff/sensu-plugins-azurerm
