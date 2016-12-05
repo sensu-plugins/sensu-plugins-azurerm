@@ -1,9 +1,9 @@
 #! /usr/bin/env ruby
 #
-# metric-azurerm-service-bus-subscription-message-count
+# check-azurerm-service-bus-topic-size
 #
 # DESCRIPTION:
-#   This plugin exposes the Service Bus Subscription Message Counts as a Metric
+#   This plugin checks a given Service Bus Topic percentage used with warning/critical thresholds
 #
 # OUTPUT:
 #   plain-text
@@ -17,13 +17,14 @@
 #
 # USAGE:
 #
-#   ./metric-azurerm-service-bus-subscription-message-count.rb
+#   ./check-azurerm-service-bus-topic-size.rb
 #                             --resourceGroup "resourcegroup"
 #                             --namespace "namespace"
 #                             --topic "topic"
-#                             --subscriptionName "subscriptionName"
+#                             -w 60
+#                             -c 80
 #
-#   ./metric-azurerm-service-bus-subscription-message-count.rb
+#   ./check-azurerm-service-bus-topic-size.rb
 #                             -t "00000000-0000-0000-0000-000000000000"
 #                             -c "00000000-0000-0000-0000-000000000000"
 #                             -S "00000000-0000-0000-0000-000000000000"
@@ -31,39 +32,29 @@
 #                             --resourceGroup "resourcegroup"
 #                             --namespace "namespace"
 #                             --topic "topic"
-#                             --subscriptionName "subscriptionName"
-#
-#   ./metric-azurerm-service-bus-subscription-message-count.rb
-#                             --tenant "00000000-0000-0000-0000-000000000000"
-#                             --client "00000000-0000-0000-0000-000000000000"
-#                             --clientSecret "00000000-0000-0000-0000-000000000000"
-#                             --subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-#                             --resourceGroup "resourcegroup"
-#                             --namespaceName "namespace"
-#                             --topicName "topic"
-#                             --subscriptionName "subscriptionName"
-#                             --customScheme "foo"
+#                             -w 60
+#                             -c 80
 #
 # NOTES:
 #
 # LICENSE:
-#   Tom Harvey
+#   Andy Royle
 #   Released under the same terms as Sensu (the MIT license); see LICENSE
 #   for details.
 #
 
 require 'azure_mgmt_service_bus'
-require 'sensu-plugin/metric/cli'
+require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
 
-class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::CLI::Statsd
+class CheckAzureRMServiceBusTopicSize < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
 
   option :tenant_id,
          description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
          short: '-t ID',
          long: '--tenant ID',
-         default: ENV['ARM_TENANT_ID'] # TODO: can we pull these out from the Check too?
+         default: ENV['ARM_TENANT_ID']
 
   option :client_id,
          description: 'ARM Client ID. Either set ENV[\'ARM_CLIENT_ID\'] or provide it as an option',
@@ -95,14 +86,17 @@ class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::C
          description: 'Azure Service Bus Topic Name',
          long: '--topicName TOPIC'
 
-  option :subscription_name,
-         description: 'Azure Service Bus Topic Name',
-         long: '--subscriptionName TOPIC'
+  option :warning_percentage,
+         description: 'Warning Percentage threshold for filter',
+         short: '-w PERCENTAGE',
+         long: '--warning PERCENTAGE',
+         proc: proc { |l| l.to_f }
 
-  option :custom_scheme,
-         description: 'Metric naming scheme, text to prepend to .$parent.$child',
-         long: '--customScheme SCHEME',
-         default: 'azurerm.servicebus'
+  option :critical_percentage,
+         description: 'Critical Percentage threshold for filter',
+         short: '-c PERCENTAGE',
+         long: '--critical PERCENTAGE',
+         proc: proc { |l| l.to_f }
 
   def run
     tenant_id = config[:tenant_id]
@@ -113,20 +107,27 @@ class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::C
     resource_group_name = config[:resource_group_name]
     namespace_name = config[:namespace_name]
     topic_name = config[:topic_name]
-    subscription_name = config[:subscription_name]
 
-    service_bus_client = ServiceBusUsage.new.build_service_bus_subscription_client(tenant_id, client_id, client_secret, subscription_id)
-    result = service_bus_client.get(resource_group_name, namespace_name, topic_name, subscription_name)
+    warning_percentage = config[:warning_percentage]
+    critical_percentage = config[:critical_percentage]
 
-    count = result.message_count
+    service_bus_client = ServiceBusUsage.new.build_service_bus_topic_client(tenant_id, client_id, client_secret, subscription_id)
+    result = service_bus_client.get(resource_group_name, namespace_name, topic_name)
 
-    timestamp = Time.now.utc.to_i
-    scheme = config[:custom_scheme]
-    name = [scheme, resource_group_name, namespace_name, topic_name, subscription_name].join('.').tr(' ', '_').tr('{}', '').tr('[]', '')
-    metric_name = [name, 'message_count'].join('.')
+    max_size_in_bytes = result.max_size_in_megabytes * 1024 * 1024
+    current_size = result.size_in_bytes
+    percentage_used = (current_size.to_f / max_size_in_bytes.to_f) * 100
 
-    output metric_name, count, timestamp
-    ok
+    message = "Current size of topic '#{topic_name}' is #{percentage_used}"
+
+    if percentage_used >= critical_percentage
+      critical message
+    elsif percentage_used >= warning_percentage
+      warning message
+    else
+      ok message
+    end
+
   rescue => e
     puts "Error: exception: #{e}"
     critical

@@ -3,6 +3,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
+## Unreleased
+### Added
+- Checks for
+  - ServiceBus subscription
+  - ServiceBus topic size
+
 ## 0.0.4 - 2016-12-04
 ### Added
 - Checks for the following Quota's:

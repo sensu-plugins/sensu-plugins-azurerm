@@ -1,9 +1,9 @@
 #! /usr/bin/env ruby
 #
-# metric-azurerm-service-bus-subscription-message-count
+# check-azurerm-service-bus-subscription
 #
 # DESCRIPTION:
-#   This plugin exposes the Service Bus Subscription Message Counts as a Metric
+#   This plugin asserts that a given Service Bus Subscription exists
 #
 # OUTPUT:
 #   plain-text
@@ -17,13 +17,13 @@
 #
 # USAGE:
 #
-#   ./metric-azurerm-service-bus-subscription-message-count.rb
+#   ./check-azurerm-service-bus-subscription.rb
 #                             --resourceGroup "resourcegroup"
 #                             --namespace "namespace"
 #                             --topic "topic"
 #                             --subscriptionName "subscriptionName"
 #
-#   ./metric-azurerm-service-bus-subscription-message-count.rb
+#   ./check-azurerm-service-bus-subscription.rb
 #                             -t "00000000-0000-0000-0000-000000000000"
 #                             -c "00000000-0000-0000-0000-000000000000"
 #                             -S "00000000-0000-0000-0000-000000000000"
@@ -33,37 +33,26 @@
 #                             --topic "topic"
 #                             --subscriptionName "subscriptionName"
 #
-#   ./metric-azurerm-service-bus-subscription-message-count.rb
-#                             --tenant "00000000-0000-0000-0000-000000000000"
-#                             --client "00000000-0000-0000-0000-000000000000"
-#                             --clientSecret "00000000-0000-0000-0000-000000000000"
-#                             --subscription "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
-#                             --resourceGroup "resourcegroup"
-#                             --namespaceName "namespace"
-#                             --topicName "topic"
-#                             --subscriptionName "subscriptionName"
-#                             --customScheme "foo"
-#
 # NOTES:
 #
 # LICENSE:
-#   Tom Harvey
+#   Andy Royle
 #   Released under the same terms as Sensu (the MIT license); see LICENSE
 #   for details.
 #
 
 require 'azure_mgmt_service_bus'
-require 'sensu-plugin/metric/cli'
+require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
 
-class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::CLI::Statsd
+class CheckAzureRMServiceBusSubscription < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
 
   option :tenant_id,
          description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
          short: '-t ID',
          long: '--tenant ID',
-         default: ENV['ARM_TENANT_ID'] # TODO: can we pull these out from the Check too?
+         default: ENV['ARM_TENANT_ID']
 
   option :client_id,
          description: 'ARM Client ID. Either set ENV[\'ARM_CLIENT_ID\'] or provide it as an option',
@@ -99,11 +88,6 @@ class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::C
          description: 'Azure Service Bus Topic Name',
          long: '--subscriptionName TOPIC'
 
-  option :custom_scheme,
-         description: 'Metric naming scheme, text to prepend to .$parent.$child',
-         long: '--customScheme SCHEME',
-         default: 'azurerm.servicebus'
-
   def run
     tenant_id = config[:tenant_id]
     client_id = config[:client_id]
@@ -118,15 +102,12 @@ class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::C
     service_bus_client = ServiceBusUsage.new.build_service_bus_subscription_client(tenant_id, client_id, client_secret, subscription_id)
     result = service_bus_client.get(resource_group_name, namespace_name, topic_name, subscription_name)
 
-    count = result.message_count
+    if result.nil?
+      critical "Subscription '#{config[:subscription_name]}' not found in topic '#{config[:topic_name]}'"
+    else
+      ok "Subscription '#{config[:subscription_name]}' was found in topic '#{config[:topic_name]}'"
+    end
 
-    timestamp = Time.now.utc.to_i
-    scheme = config[:custom_scheme]
-    name = [scheme, resource_group_name, namespace_name, topic_name, subscription_name].join('.').tr(' ', '_').tr('{}', '').tr('[]', '')
-    metric_name = [name, 'message_count'].join('.')
-
-    output metric_name, count, timestamp
-    ok
   rescue => e
     puts "Error: exception: #{e}"
     critical

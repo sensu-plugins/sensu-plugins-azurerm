@@ -19,6 +19,8 @@
  - check-azurerm-network-security-groups-usage.rb
  - check-azurerm-public-ip-addresses-usage.rb
  - check-azurerm-route-tables-usage.rb
+ - check-azurerm-service-bus-subscription.rb
+ - check-azurerm-service-bus-topic-size.rb
  - check-azurerm-static-public-ip-addresses-usage.rb
  - check-azurerm-virtual-machines-usage.rb
  - check-azurerm-virtual-network-gateway-connected.rb
@@ -40,6 +42,8 @@
 * /bin/check-azurerm-network-security-groups-usage.rb
 * /bin/check-azurerm-public-ip-addresses-usage.rb
 * /bin/check-azurerm-route-tables-usage.rb
+* /bin/check-azurerm-service-bus-subscription.rb
+* /bin/check-azurerm-service-bus-topic-size.rb
 * /bin/check-azurerm-static-public-ip-addresses-usage.rb
 * /bin/check-azurerm-virtual-machines-usage.rb
 * /bin/check-azurerm-virtual-network-gateway-connected.rb
@@ -296,6 +300,46 @@
                                       -location "westeurope"
                                       -warning_percentage 80
                                       -critical_percentage 90
+```
+
+**check-azurerm-service-bus-subscription.rb**
+```
+./check-azurerm-service-bus-subscription.rb
+                           --resourceGroup "resourcegroup"
+                           --namespace "namespace"
+                           --topic "topic"
+                           --subscriptionName "subscriptionName"
+
+./check-azurerm-service-bus-subscription.rb
+                           -t "00000000-0000-0000-0000-000000000000"
+                           -c "00000000-0000-0000-0000-000000000000"
+                           -S "00000000-0000-0000-0000-000000000000"
+                           -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                           --resourceGroup "resourcegroup"
+                           --namespace "namespace"
+                           --topic "topic"
+                           --subscriptionName "subscriptionName"
+```
+
+**check-azurerm-service-bus-topic-size.rb**
+```
+./check-azurerm-service-bus-topic-size.rb
+                           --resourceGroup "resourcegroup"
+                           --namespace "namespace"
+                           --topic "topic"
+                           -w 60
+                           -c 80
+
+./check-azurerm-service-bus-topic-size.rb
+                           -t "00000000-0000-0000-0000-000000000000"
+                           -c "00000000-0000-0000-0000-000000000000"
+                           -S "00000000-0000-0000-0000-000000000000"
+                           -s "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234"
+                           --resourceGroup "resourcegroup"
+                           --namespace "namespace"
+                           --topic "topic"
+                           -w 60
+                           -c 80
 ```
 
 **check-azurerm-virtual-machines-usage.rb**
