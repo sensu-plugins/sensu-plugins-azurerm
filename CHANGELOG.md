@@ -1,15 +1,31 @@
-#Change Log
+# Change Log
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
+This CHANGELOG follows the format located [here](https://github.com/sensu-plugins/community/blob/master/HOW_WE_CHANGELOG.md)
 
-## 0.0.5 - 2016-12-05
+## [Unreleased]
+### Changed
+- changelog gudelines location (@majormoses)
+- standard `.gitignore` (@majormoses)
+- standard `Rakefile` (@majormoses)
+- rubygems api key for sensu-plugins user (@majormoses)
+- `.travis.yml` docker, notitications, test all versions on tag (@majormoses)
+
+
+### Added
+- version diff links (@majormoses)
+- standard PR/issue templates (@majormoses)
+- standard `.kitchen.yml` (@majormoses)
+- ruby 2.4.1 testing (@majormoses)
+- standard `test-kitchen`, `kitchen-docker`, `serverspec` testing skel (@majormoses)
+
+## [0.0.5] - 2016-12-05
 ### Added
 - Checks for
   - ServiceBus subscription
   - ServiceBus topic size
 
-## 0.0.4 - 2016-12-04
+## [0.0.4] - 2016-12-04
 ### Added
 - Checks for the following Quota's:
   - D Family Cores
@@ -30,7 +46,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ### Fixed
 - Documentation for Virtual Network Gateways
 
-## 0.0.3 - 2016-11-24
+## [0.0.3] - 2016-11-24
 ### Added
 - Virtual Network Gateways:
   - Added functionality to check Failover connections
@@ -38,12 +54,19 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 - Service Bus:
   - Added a Metric to expose the the Message Count for a Service Bus Topic
 
-## 0.0.2 - 2016-11-23
+## [0.0.2] - 2016-11-23
 ### Added
 - Virtual Network Gateways:
   - Check to ensure a given Virtual Network Gateway is Connected
   - Metrics exposed for a given Virtual Network Gateway
 
-## 0.0.1 - 2016-11-18
+## [0.0.1] - 2016-11-18
 ### Added
 - initial release
+
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.5...HEAD
+[0.0.5]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.4...0.0.5
+[0.0.4]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.3...0.0.4
+[0.0.3]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.2...0.0.3
+[0.0.2]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.1...0.0.2
+[0.0.1]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/f70cfb714fc13046362173033b063f0ccb11563a...0.0.1

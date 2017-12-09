@@ -1,3 +1,5 @@
+sudo: true
+service: docker
 language: ruby
 cache:
 - bundler
@@ -5,28 +7,30 @@ install:
 - bundle install
 rvm:
 - 2.1
-- 2.2.1
+- 2.2
 - 2.3.0
+- 2.4.1
 notifications:
   email:
     recipients:
     - sensu-plugin@ibuildstuff.co.uk
+    - sensu-plugin@sensu-plugins.io
     on_success: change
     on_failure: always
 script:
-- bundle exec rake default
 - gem build sensu-plugins-azurerm.gemspec
 - gem install sensu-plugins-azurerm-*.gem
-
+- bundle exec rake quick
+- bundle exec rake kitchen:ruby-`echo $TRAVIS_RUBY_VERSION | sed -e "s/\.//g"`-debian-8
 deploy:
   provider: rubygems
   api_key:
-    secure: "V/Py5pAb6/47vF/aBbhMRFZjPSwlvuqK4E2KiBsfII9qERq3DQxQW5s/u361XGlzhCjic08c6FyppZG6+mDQhemqkZG8mOb6Nr/8xuUXGi5blpFERfmxRysGMXGsNsGfvmBuQtgpWxzjek8amXRFFdCPL+II6tVrFOpQnZJMxfJ4cqXdnasCA3TzhXCzO9V0QA7JzjmKtjk7bxcd4Zjd2fW5AC6T3k1gXuBXhwSbiqgh+iDBTMl8IC9u7BCPRdNhPYuRbwYWce9xzEwDgSLkqqOwCOYyb9uPF4qeNAMdmmGCeNLK9EcKPA8GhjvPcq5995HXT5j/5yd2/CTpzc6XuFLEn9LQC20cYBCDSKB1Bu8Q25PAXysRHNkdYH6T5plD8F3dm00LQowphB8C14FKagEj/S5Ae/pr2g8EfbC+/P2LvLOq4i9oD7sqzceQO9YPVheyuL67AYllihJtFAYEmtU0lKhHZ6CKZSwvl59P62ir1ne8S2695BeZhDwB56Kbu6/uNoHzmr6yVFlc5VxbL/XY8D5GA1zPMzVGtrQWhL8W1g0Cn9oJKWJiQa5aET7v0xZneMxDqD6PcjiaQzR/CnC+MbEjfvA6F1Y9O/Pr/UTSfTLu/EqZxSrnhup2BwvrfLoORgIkJunIoyERvkuSrPxGliYG8jQd1R6+RBbtlyo="
+    secure: qFtQsZUvfs7kpE2nMfFlBMhYkEfsn6F1k1iXsi68kqRGm1kgv1BhSVhnzvkeD7BM8ZykQNrRaXnod4WHdelwvBoXghjczKNCO0OzyskQEBB0BFHc/Ipn3bl1lJxe7ka+ks8M0wdEJPAbhPncAsLVE3H3do0uby2dLCL87KGrv1OC2VOxLbQjl+lLAK44+Qxzm39wbxJJmdZGIBPjGXRp1DnDroOrXwRgpGZ9LvtuMD5Zpu6FFoxh0S/0Xw9M7Y70V5Zy51NZ3NQn/o+iVp9Lib/w62sRWyhMBvhg0QHJYSn+CoZCpHhOgc3sHzPFTy3OI0fkh9rxmFPYpvI4Mw5U9KngTYf941Rr3SzkjA7v/+zCbfHI9JnzB9E5ndTxbSweh4IG+MI+1xspPORIBKRLOv/rYMo8XgiUplqqB/StW6fz3psIA88Q9N7X02l12pOPX5BHfsxk/c3BO/jNUUWnH9V62N+DLoHJ5My8RLLGw2jpb6Ln/8RPg2HxwwTEaWb7j9+F/ZhSnQ7zPaxGHu1Da/w2dBWGwvFxwVgGM7OXUhq3Cv4iSoupzekFfmdn3SQTSq4ZExlWgUlzwgfTM3Q8OKIcWJv/J81NYXBpu3EwssxN2zD3tw4EySxstlN5FU9H5aqFWMK4NPrz7Hcl0mUOJHKIl/UmuqmRzPR0/8NI9iQ=
   gem: sensu-plugins-storm
   on:
     tags: true
-    rvm: 2.0
     rvm: 2.1
     rvm: 2.2
     rvm: 2.3.0
+    rvm: 2.4.1
     repo: tombuildsstuff/sensu-plugins-azurerm
