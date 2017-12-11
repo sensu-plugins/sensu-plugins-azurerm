@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format located [here](https://github.com/sensu-plugins/community/blob/master/HOW_WE_CHANGELOG.md)
 
 ## [Unreleased]
+
+## [1.0.0] - 2017-12-10
 ### Changed
 - changelog gudelines location (@majormoses)
 - standard `.gitignore` (@majormoses)
@@ -64,7 +66,8 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.5...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/1.0.0..HEAD
+[1.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.5...1.0.0
 [0.0.5]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.4...0.0.5
 [0.0.4]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.3...0.0.4
 [0.0.3]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.2...0.0.3
