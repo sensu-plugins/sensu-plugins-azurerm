@@ -5,6 +5,7 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+## [2.0.0] - 2017-12-11
 ### Security
 - updated rubocop dependency to `~> 0.51.0` per: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-8418. (@majormoses)
 
@@ -76,7 +77,8 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/1.0.0..HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/2.0.0..HEAD
+[2.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/1.0.0..2.0.0
 [1.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.5...1.0.0
 [0.0.5]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.4...0.0.5
 [0.0.4]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.3...0.0.4
