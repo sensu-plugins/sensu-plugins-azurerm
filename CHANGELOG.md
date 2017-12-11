@@ -5,6 +5,9 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+### Changed
+- updated `.gemspec` to reflect new url after transfer (@majormoses)
+
 ## [2.0.0] - 2017-12-11
 ### Security
 - updated rubocop dependency to `~> 0.51.0` per: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-8418. (@majormoses)

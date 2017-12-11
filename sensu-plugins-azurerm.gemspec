@@ -11,7 +11,7 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.email                  = '<github@ibuildstuff.co.uk>'
   s.executables            = Dir.glob('bin/**/*.rb').map { |file| File.basename(file) }
   s.files                  = Dir.glob('{bin,lib}/**/*') + %w[LICENSE README.md CHANGELOG.md]
-  s.homepage               = 'https://github.com/tombuildsstuff/sensu-plugins-azurerm'
+  s.homepage               = 'https://github.com/sensu-plugins/sensu-plugins-azurerm'
   s.license                = 'MIT'
   s.metadata               = { 'maintainer'         => 'Tom Harvey',
                                'development_status' => 'active',
