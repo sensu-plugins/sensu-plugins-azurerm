@@ -107,8 +107,7 @@ class CheckAzureRMServiceBusSubscription < Sensu::Plugin::Check::CLI
     else
       ok "Subscription '#{config[:subscription_name]}' was found in topic '#{config[:topic_name]}'"
     end
-
-  rescue => e
+  rescue StandardError => e
     puts "Error: exception: #{e}"
     critical
   end

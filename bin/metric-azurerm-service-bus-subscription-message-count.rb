@@ -127,7 +127,7 @@ class MetricAzureRMServiceBusSubscriptionMessageCount < Sensu::Plugin::Metric::C
 
     output metric_name, count, timestamp
     ok
-  rescue => e
+  rescue StandardError => e
     puts "Error: exception: #{e}"
     critical
   end

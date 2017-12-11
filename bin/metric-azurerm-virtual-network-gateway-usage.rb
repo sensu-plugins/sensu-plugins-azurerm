@@ -112,7 +112,7 @@ class MetricAzureRMVirtualNetworkGatewayUsage < Sensu::Plugin::Metric::CLI::Stat
     output inbound_name, inbound, timestamp
     output outbound_name, outbound, timestamp
     ok
-  rescue => e
+  rescue StandardError => e
     puts "Error: exception: #{e}"
     critical
   end
