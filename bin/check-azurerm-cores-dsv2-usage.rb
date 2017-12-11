@@ -113,8 +113,7 @@ class CheckAzureRMCoresDSv2Usage < Sensu::Plugin::Check::CLI
     else
       ok message
     end
-
-  rescue => e
+  rescue StandardError => e
     puts "Error: exception: #{e}"
     critical
   end

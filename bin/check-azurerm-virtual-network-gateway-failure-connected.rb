@@ -119,14 +119,13 @@ class CheckAzureRMVirtualNetworkGatewayConnected < Sensu::Plugin::Check::CLI
     message = "Primary: State is '#{primary_connection_state}'. Usage is #{primary_inbound} in / #{primary_outbound} out.\n"
     message += "Secondary: State is '#{secondary_connection_state}'. Usage is #{secondary_inbound} in / #{secondary_outbound} out."
 
-    if primary_result.connection_status.casecmp('connected') == 0 ||
-       secondary_result.connection_status.casecmp('connected') == 0
+    if primary_result.connection_status.casecmp('connected').zero? ||
+       secondary_result.connection_status.casecmp('connected').zero?
       ok message
     else
       critical message
     end
-
-  rescue => e
+  rescue StandardError => e
     puts "Error: exception: #{e}"
     critical
   end
