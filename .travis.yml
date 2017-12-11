@@ -26,11 +26,11 @@ deploy:
   provider: rubygems
   api_key:
     secure: qFtQsZUvfs7kpE2nMfFlBMhYkEfsn6F1k1iXsi68kqRGm1kgv1BhSVhnzvkeD7BM8ZykQNrRaXnod4WHdelwvBoXghjczKNCO0OzyskQEBB0BFHc/Ipn3bl1lJxe7ka+ks8M0wdEJPAbhPncAsLVE3H3do0uby2dLCL87KGrv1OC2VOxLbQjl+lLAK44+Qxzm39wbxJJmdZGIBPjGXRp1DnDroOrXwRgpGZ9LvtuMD5Zpu6FFoxh0S/0Xw9M7Y70V5Zy51NZ3NQn/o+iVp9Lib/w62sRWyhMBvhg0QHJYSn+CoZCpHhOgc3sHzPFTy3OI0fkh9rxmFPYpvI4Mw5U9KngTYf941Rr3SzkjA7v/+zCbfHI9JnzB9E5ndTxbSweh4IG+MI+1xspPORIBKRLOv/rYMo8XgiUplqqB/StW6fz3psIA88Q9N7X02l12pOPX5BHfsxk/c3BO/jNUUWnH9V62N+DLoHJ5My8RLLGw2jpb6Ln/8RPg2HxwwTEaWb7j9+F/ZhSnQ7zPaxGHu1Da/w2dBWGwvFxwVgGM7OXUhq3Cv4iSoupzekFfmdn3SQTSq4ZExlWgUlzwgfTM3Q8OKIcWJv/J81NYXBpu3EwssxN2zD3tw4EySxstlN5FU9H5aqFWMK4NPrz7Hcl0mUOJHKIl/UmuqmRzPR0/8NI9iQ=
-  gem: sensu-plugins-storm
+  gem: sensu-plugins-azurerm
   on:
     tags: true
     rvm: 2.1
     rvm: 2.2
     rvm: 2.3.0
     rvm: 2.4.1
-    repo: tombuildsstuff/sensu-plugins-azurerm
+    repo: sensu-plugins/sensu-plugins-azurerm
