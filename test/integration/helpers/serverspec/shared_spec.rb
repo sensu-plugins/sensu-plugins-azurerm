@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require_relative 'spec_helper'
 
 shared_examples_for 'ruby checks' do |check|
   describe command('which ruby') do

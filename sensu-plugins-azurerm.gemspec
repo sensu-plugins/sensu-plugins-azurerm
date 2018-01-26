@@ -27,10 +27,10 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.test_files             = s.files.grep(%r{^(test|spec|features)/})
   s.version                = SensuPluginsAzureRM::Version::VER_STRING
 
-  s.add_runtime_dependency 'azure_mgmt_compute', '0.8.0'
-  s.add_runtime_dependency 'azure_mgmt_network', '0.8.0'
-  s.add_runtime_dependency 'azure_mgmt_service_bus', '0.8.0'
-  s.add_runtime_dependency 'ms_rest_azure',      '~> 0.6.2'
+  s.add_runtime_dependency 'azure_mgmt_compute', '0.15.2'
+  s.add_runtime_dependency 'azure_mgmt_network', '0.15.2'
+  s.add_runtime_dependency 'azure_mgmt_service_bus', '0.15.2'
+  s.add_runtime_dependency 'ms_rest_azure',      '~> 0.10.1'
   s.add_runtime_dependency 'sensu-plugin',       '~> 2.0'
 
   s.add_development_dependency 'bundler',                   '~> 1.7'
@@ -48,4 +48,6 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.add_development_dependency 'serverspec',                '~> 2.36.1'
   s.add_development_dependency 'test-kitchen',              '~> 1.6'
   s.add_development_dependency 'yard',                      '~> 0.8'
+  s.add_development_dependency 'rdoc',                      '~> 5.1'
+  s.add_development_dependency 'webmock',                   '~> 3.1'
 end
