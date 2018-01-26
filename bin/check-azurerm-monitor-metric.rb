@@ -108,15 +108,11 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   end
 
   def get_last_metric_value
-    last_metric_value = nil
-
     metric_response[:value].last[:timeseries].last[:data].reverse_each { |val|
       if val[config[:aggregation].to_sym]
-        last_metric_value = val[config[:aggregation].to_sym].to_f
-        break
+        return val[config[:aggregation].to_sym].to_f
       end
     }
-    last_metric_value
   end
 
   def metric_response
