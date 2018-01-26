@@ -4,6 +4,10 @@ CodeClimate::TestReporter.start
 RSpec.configure do |c|
   c.formatter = :documentation
   c.color = true
+
+  c.before(:suite) do
+    Sensu::Plugin::CLI.class_variable_set(:@@autorun, Common)
+  end
 end
 
 #
