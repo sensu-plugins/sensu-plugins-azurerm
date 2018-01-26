@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'shared_spec'
+require_relative '../../helpers/serverspec/spec_helper'
+require_relative '../../helpers/serverspec/shared_spec'

@@ -2,7 +2,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'date'
-require './lib/sensu-plugins-azurerm.rb'
+require 'sensu-plugins-azurerm/version'
 
 Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.authors                = ['Tom Harvey']
@@ -42,10 +42,12 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.add_development_dependency 'mixlib-shellout',           ['< 2.3.0', '~> 2.2']
   s.add_development_dependency 'pry',                       '~> 0.10'
   s.add_development_dependency 'rake',                      '~> 10.5'
+  s.add_development_dependency 'rdoc',                      '~> 5.1'
   s.add_development_dependency 'redcarpet',                 '~> 3.2'
   s.add_development_dependency 'rspec',                     '~> 3.4'
   s.add_development_dependency 'rubocop',                   '~> 0.51.0'
   s.add_development_dependency 'serverspec',                '~> 2.36.1'
   s.add_development_dependency 'test-kitchen',              '~> 1.6'
+  s.add_development_dependency 'webmock',                   '~> 3.1'
   s.add_development_dependency 'yard',                      '~> 0.8'
 end
