@@ -90,29 +90,57 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   end
 
   def run
-    if config[:critical_over] && last_metric_value > config[:critical_over].to_f
-      critical "Metric #{config[:metric]} is #{last_metric_value}"
-    elsif config[:warning_over] && last_metric_value > config[:warning_over].to_f
-      warning "Metric #{config[:metric]} is #{last_metric_value}"
-    elsif config[:critical_under] && last_metric_value < config[:critical_under].to_f
-      critical "Metric #{config[:metric]} is #{last_metric_value}"
-    elsif config[:warning_under] && last_metric_value < config[:warning_under].to_f
-      warning "Metric #{config[:metric]} is #{last_metric_value}"
+    if !config[:critical_over] && !config[:warning_over] && !config[:critical_under] && !config[:warning_under]
+      critical "At least one threshold must be provided."
+    end
+
+    if last_metric_values.empty?
+      unknown "There are no metric values for #{config[:metric]} on resource #{config[:resource]} with aggregation #{config[:aggregation]}"
     else
-      ok "Metric #{config[:metric]} is #{last_metric_value}"
+      last_metric_values.each do |metric_val|
+        if config[:critical_over] && metric_val[:value] > config[:critical_over].to_f
+          critical "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+        elsif config[:warning_over] && metric_val[:value] > config[:warning_over].to_f
+          warning "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+        elsif config[:critical_under] && metric_val[:value] < config[:critical_under].to_f
+          critical "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+        elsif config[:warning_under] && metric_val[:value] < config[:warning_under].to_f
+          warning "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+        else
+          ok "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+        end
+      end
     end
   end
 
-  def last_metric_value
-    @last_metric_value ||= get_last_metric_value
+  def last_metric_values
+    @last_metric_values ||= get_last_metric_values
   end
 
-  def get_last_metric_value
-    metric_response[:value].last[:timeseries].last[:data].reverse_each { |val|
-      if val[config[:aggregation].to_sym]
-        return val[config[:aggregation].to_sym].to_f
+  def get_last_metric_values
+    values = []
+    metric_response[:value].each do | metric_resp_value |
+      name = metric_resp_value[:name] ? metric_resp_value[:name][:value] : ""
+
+      if metric_resp_value[:timeseries].empty?
+        next
+      else
+        metric_resp_value[:timeseries].each do |ts|
+          ts[:data].reverse_each { |metric_value|
+            if metric_value[config[:aggregation].to_sym]
+              values << {
+                value: metric_value[config[:aggregation].to_sym].to_f,
+                metric_name: name
+              }
+
+              break
+            end
+          }
+        end
       end
-    }
+    end
+
+    values
   end
 
   def metric_response
