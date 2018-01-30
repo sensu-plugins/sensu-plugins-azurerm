@@ -347,6 +347,93 @@ describe "check monitor metric script" do
     end
   end
 
+  context "When subscription, resource type, namespace, and group given" do
+
+    let(:script_args) { [
+      "--resource", resource_name,
+      "--subscription", subscription,
+      "--resource-type", resource_type,
+      "--resource-namespace", resource_namespace,
+      "--resource-group", resource_group,
+      "--metric", metric_name,
+      "--critical", critical,
+    ] }
+
+    let(:resource_name) { "res" }
+    let(:resource_type) { "type" }
+    let(:resource_namespace) { "Name.Space" }
+    let(:resource_group) { "group" }
+    let(:resource_parent) { "" }
+    let(:subscription) { "sub" }
+
+    let(:resource_id) {
+      "subscriptions/#{subscription}/resourceGroups/#{resource_group}/" +
+        "providers/#{resource_namespace}/#{resource_type}/#{resource_name}"
+    }
+
+    it "Builds the Azure URL based on the components" do
+      check_instance.run
+
+      expect(WebMock).to have_requested(:get, expected_url)
+    end
+
+    context "And parent given" do
+      let(:script_args) { [
+        "--resource", resource_name,
+        "--subscription", subscription,
+        "--resource-type", resource_type,
+        "--resource-namespace", resource_namespace,
+        "--resource-group", resource_group,
+        "--resource-parent", resource_parent,
+        "--metric", metric_name,
+        "--critical", critical,
+      ] }
+
+      let(:resource_parent) { "parent" }
+
+      let(:resource_id) {
+        "subscriptions/#{subscription}/resourceGroups/#{resource_group}/" +
+          "providers/#{resource_namespace}/#{resource_parent}/#{resource_type}/#{resource_name}"
+      }
+
+      it "Builds the Azure URL with the parent" do
+        check_instance.run
+
+        expect(WebMock).to have_requested(:get, expected_url)
+      end
+    end
+
+    context "And namespace not given" do
+      let(:resource_namespace) { "" }
+
+      it "Returns unknown" do
+        check_instance.run
+
+        expect(check_instance).to have_received(:unknown)
+      end
+    end
+
+    context "And type not given" do
+      let(:resource_type) { "" }
+
+      it "Returns unknown" do
+        check_instance.run
+
+        expect(check_instance).to have_received(:unknown)
+      end
+    end
+
+    context "And group not given" do
+      let(:resource_group) { "" }
+
+      it "Returns unknown" do
+        check_instance.run
+
+        expect(check_instance).to have_received(:unknown)
+      end
+    end
+  end
+
   def mock_result_methods(instance)
     allow(instance).to receive(:unknown)
     allow(instance).to receive(:critical)

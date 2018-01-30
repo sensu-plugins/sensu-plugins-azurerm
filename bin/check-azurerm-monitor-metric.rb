@@ -26,15 +26,40 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          long: '--clientSecret SECRET',
          default: ENV['ARM_CLIENT_SECRET']
 
-  # option :subscription_id,
-  #        description: 'ARM Subscription ID',
-  #        short: '-S ID',
-  #        long: '--subscription ID',
-  #        default: ENV['ARM_SUBSCRIPTION_ID']
+  option :subscription_id,
+         description: 'ARM Subscription ID',
+         short: '-S ID',
+         long: '--subscription ID',
+         default: ENV['ARM_SUBSCRIPTION_ID']
+
+  option :resource_type,
+         description: 'Resource Type.  If specified, the resource should contain the name and not the full id, and the resource namespace/group and subscriptions are also required. Note:  This should not contain the namespace.  Use --resource-namespace instead.',
+         short: '-y NAME',
+         long: '--resource-type NAME',
+         default: ""
+
+  option :resource_namespace,
+         description: 'Resource Namespace.  If specified, the resource should contain the name and not the full id, and the resource namespace/group and subscriptions are also required.',
+         short: '-n NAME',
+         long: '--resource-namespace NAME',
+         default: ""
+
+  option :resource_group,
+         description: 'Resource Group.  If specified, the resource should contain the name and not the full id, and the resource namespace/group and subscriptions are also required.',
+         short: '-g NAME',
+         long: '--resource-group NAME',
+         default: ""
+
+  option :resource_parent,
+         description: 'Resource Parent.',
+         short: '-p NAME',
+         long: '--resource-parent NAME',
+         default: ""
+
 
   # example id: /subscriptions/576b7196-d42b-4b63-b696-af3ff33269a7/resourceGroups/test-group-1/providers/Microsoft.Network/virtualNetworkGateways/test-gateway
   option :resource,
-         description:  'The (full) id of the resource for the metric',
+         description:  'Either the full id or name of the resource.  If the name is given, then resource type/namespace/group and subscription are required.',
          short: '-r ID',
          long: '--resource ID',
          required: true
@@ -151,8 +176,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
     )
 
     begin
-      res = config[:resource].start_with?("/") ? config[:resource] : "/" + config[:resource]
-      url = "https://management.azure.com#{res}/providers/microsoft.insights/metrics?" +
+      url = "https://management.azure.com#{resource}/providers/microsoft.insights/metrics?" +
         "api-version=#{AZURE_API_VER}&" +
         "metric=#{config[:metric]}&" +
         "timespan=#{CGI.escape(timespan)}&" +
@@ -177,6 +201,36 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
     handle_response(res)
 
     JSON.parse(res.body, symbolize_names: true)
+  end
+
+  def resource
+    @resource ||= build_resource
+  end
+
+  def build_resource
+    if !config[:resource_type].to_s.empty? || !config[:resource_namespace].to_s.empty? || !config[:resource_group].to_s.empty?
+
+      if config[:resource_type].to_s.empty? ||
+        config[:resource_namespace].to_s.empty? ||
+        config[:resource_group].to_s.empty? ||
+        config[:subscription_id].to_s.empty?
+
+        unknown "If resource type, namespace, or group is given, then all are required along with the subscription id."
+      else
+        "/subscriptions/#{config[:subscription_id]}/resourceGroups/#{config[:resource_group]}/" +
+          "providers/#{resource_type}/#{config[:resource]}"
+      end
+    else
+      config[:resource].start_with?("/") ? config[:resource] : "/" + config[:resource]
+    end
+  end
+
+  def resource_type
+    if config[:resource_parent].to_s.empty?
+      "#{config[:resource_namespace]}/#{config[:resource_type]}"
+    else
+      "#{config[:resource_namespace]}/#{config[:resource_parent]}/#{config[:resource_type]}"
+    end
   end
 
   def timespan
