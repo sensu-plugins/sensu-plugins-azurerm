@@ -70,12 +70,10 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          long: '--metric ID',
          required: true
 
-  option :dimensions,
-         description:  'Comma delimited list of DimName=Value',
-         short: '-d DIMENSIONS',
-         long: '--dimensions DIMENSIONS',
-         proc: proc { |d| parse_dimensions(d) },
-         default: []
+  option :filter,
+         description:  "The filter applied to the metric.  See Azure docs for the syntax.  Note: This can be used to segment the return by dimensions, so that the script checks each dimension separately. eg APIName eq '*'",
+         short: '-f FILTER',
+         long: '--filter FILTER'
 
   option :aggregation,
          description:  'Aggregation.  This can be Average, Count, Maximum, Minimum, Total',
@@ -181,6 +179,8 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
         "metric=#{config[:metric]}&" +
         "timespan=#{CGI.escape(timespan)}&" +
         "aggregation=#{config[:aggregation]}"
+
+      url += "&filter=#{CGI.escape(config[:filter])}" if config[:filter]
 
       uri = URI.parse(url)
 

@@ -11,14 +11,20 @@ require 'webmock/rspec'
 
 describe "check monitor metric script" do
   subject(:check_instance) { CheckAzurermMonitorMetric.new(script_args) }
-  let(:script_args) { [
-    "--resource", resource_id,
-    "--metric", metric_name,
-    "--critical", critical,
-    "--warning", warning,
-    "--critical-under", critical_under,
-    "--warning-under", warning_under
-  ] }
+  let(:script_args) {
+    args = [
+      "--resource", resource_id,
+      "--metric", metric_name,
+      "--critical", critical,
+      "--warning", warning,
+      "--critical-under", critical_under,
+      "--warning-under", warning_under
+    ]
+
+    args += ["--filter", filter] if filter
+
+    args
+  }
   let(:resource_id) { "resource" }
   let(:metric_name) { "metric" }
   let(:critical) { "3.0" }
@@ -28,11 +34,15 @@ describe "check monitor metric script" do
   let(:warning_under) { "-100.0" }
 
   let(:expected_url) {
-    "https://management.azure.com/#{resource_id}/providers/microsoft.insights/metrics?" +
+    url = "https://management.azure.com/#{resource_id}/providers/microsoft.insights/metrics?" +
       "api-version=2017-05-01-preview&" +
       "metric=#{metric_name}&" +
       "timespan=#{timespan}&" +
       "aggregation=#{aggregation}"
+
+    url += "&filter=#{filter}" if filter
+
+    url
   }
   let(:timespan) {
     start_date = Time.now - 300
@@ -42,6 +52,7 @@ describe "check monitor metric script" do
   }
 
   let(:aggregation) { "average" }
+  let(:filter) { nil }
 
   let(:mock_az_provider) { double }
 
@@ -403,34 +414,51 @@ describe "check monitor metric script" do
       end
     end
 
-    context "And namespace not given" do
-      let(:resource_namespace) { "" }
+    context "With data missing" do
+      before do
+        # this is needed since the call to unknown that would normally stop execution is mocked out.
+        # Therefore, it still makes the URL call, so make sure it returns a correct value always.
+        stub_request(:get, /.*management.azure.com.*/).to_return(body: JSON.dump(metric_resp))
+      end
+      context "And namespace not given" do
+        let(:resource_namespace) { "" }
 
-      it "Returns unknown" do
-        check_instance.run
+        it "Returns unknown" do
+          check_instance.run
 
-        expect(check_instance).to have_received(:unknown)
+          expect(check_instance).to have_received(:unknown)
+        end
+      end
+
+      context "And type not given" do
+        let(:resource_type) { "" }
+
+        it "Returns unknown" do
+          check_instance.run
+
+          expect(check_instance).to have_received(:unknown)
+        end
+      end
+
+      context "And group not given" do
+        let(:resource_group) { "" }
+
+        it "Returns unknown" do
+          check_instance.run
+
+          expect(check_instance).to have_received(:unknown)
+        end
       end
     end
+  end
 
-    context "And type not given" do
-      let(:resource_type) { "" }
+  context "When filter provided" do
+    let(:filter) { "APIName eq 'ChangeBlobLease'" }
 
-      it "Returns unknown" do
-        check_instance.run
+    it "Sets the filter query param" do
+      check_instance.run
 
-        expect(check_instance).to have_received(:unknown)
-      end
-    end
-
-    context "And group not given" do
-      let(:resource_group) { "" }
-
-      it "Returns unknown" do
-        check_instance.run
-
-        expect(check_instance).to have_received(:unknown)
-      end
+      expect(check_instance).to have_received(:ok)
     end
   end
 
