@@ -1,7 +1,31 @@
+#! /usr/bin/env ruby
+#
+# check-azurerm-core-usage
+#
+# DESCRIPTION:
+#   Checks an azure monitor metric against thresholds
+#
+# OUTPUT:
+#   plain-text
+#
+# PLATFORMS:
+#   Linux
+#   Windows
+#
+# DEPENDENCIES:
+#   gem: ms_rest_azure
+#   gem: sensu-plugin
+#
+#
+
 require 'ms_rest_azure'
+require 'erb'
 
 require 'sensu-plugin/check/cli'
 require 'sensu-plugins-azurerm'
+
+require 'time'
+require 'net/http'
 
 class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
