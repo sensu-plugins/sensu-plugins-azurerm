@@ -2,7 +2,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'date'
-require './lib/sensu-plugins-azurerm.rb'
+require 'sensu-plugins-azurerm/version'
 
 Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.authors                = ['Tom Harvey']
@@ -27,10 +27,10 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.test_files             = s.files.grep(%r{^(test|spec|features)/})
   s.version                = SensuPluginsAzureRM::Version::VER_STRING
 
-  s.add_runtime_dependency 'azure_mgmt_compute', '0.15.2'
-  s.add_runtime_dependency 'azure_mgmt_network', '0.15.2'
-  s.add_runtime_dependency 'azure_mgmt_service_bus', '0.15.2'
-  s.add_runtime_dependency 'ms_rest_azure',      '~> 0.10.1'
+  s.add_runtime_dependency 'azure_mgmt_compute', '0.8.0'
+  s.add_runtime_dependency 'azure_mgmt_network', '0.8.0'
+  s.add_runtime_dependency 'azure_mgmt_service_bus', '0.8.0'
+  s.add_runtime_dependency 'ms_rest_azure',      '~> 0.6.2'
   s.add_runtime_dependency 'sensu-plugin',       '~> 2.0'
 
   s.add_development_dependency 'bundler',                   '~> 1.7'
