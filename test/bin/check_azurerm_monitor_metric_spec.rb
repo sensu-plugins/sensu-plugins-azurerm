@@ -40,12 +40,12 @@ describe "check monitor metric script" do
       "timespan=#{timespan}&" +
       "aggregation=#{aggregation}"
 
-    url += "&filter=#{filter}" if filter
+    url += "&$filter=#{filter}" if filter
 
     url
   }
   let(:timespan) {
-    start_date = Time.now - 300
+    start_date = Time.now - 600
     end_date = Time.now
 
     "#{start_date.iso8601}/#{end_date.iso8601}"

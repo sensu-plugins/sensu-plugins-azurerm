@@ -204,7 +204,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
         "timespan=#{CGI.escape(timespan)}&" +
         "aggregation=#{config[:aggregation]}"
 
-      url += "&filter=#{CGI.escape(config[:filter])}" if config[:filter]
+      url += "&$filter=#{CGI.escape(config[:filter])}" if config[:filter]
 
       uri = URI.parse(url)
 
@@ -258,7 +258,8 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   end
 
   def timespan
-    start_date = Time.now - 300 # 5 min
+    # 10 min.  This should be enough time to capture the last value, without wasting API credits
+    start_date = Time.now - 600
     end_date = Time.now
     "#{start_date.iso8601}/#{end_date.iso8601}"
   end
