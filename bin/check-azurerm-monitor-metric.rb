@@ -52,6 +52,19 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          long: '--clientSecret SECRET',
          default: ENV['ARM_CLIENT_SECRET']
 
+  option :use_assigned_identity,
+         description: 'Use Managed Service Identity (MSI) for authentication.',
+         short: '-l',
+         long: '--use-assigned-identity',
+         boolean: true,
+         default: false
+
+  option :local_auth_port,
+         description: 'Port used to authenticate when using the local identity via Managed Service Identity (MSI)',
+         short: '-o PORT',
+         long: '--local-auth-port PORT',
+         default: '50342'
+
   option :subscription_id,
          description: 'ARM Subscription ID',
          short: '-S ID',
@@ -201,11 +214,29 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   end
 
   def metric_response
-    provider = MsRestAzure::ApplicationTokenProvider.new(
-      config[:tenant_id],
-      config[:client_id],
-      config[:client_secret]
-    )
+    auth_header = if config[:use_assigned_identity]
+                    uri = URI.parse("http://localhost:#{config[:local_auth_port]}/oauth2/token?resource=https://management.azure.com/")
+
+                    res = Net::HTTP.start(uri.host, uri.port, use_ssl: false) do |http|
+                      req = Net::HTTP::Get.new(uri)
+                      req['Metadata'] = 'true'
+                      http.request(req)
+                    end
+
+                    handle_response(res)
+
+                    auth_resp = JSON.parse(res.body, symbolize_names: true)
+
+                    "#{auth_resp[:token_type]} #{auth_resp[:access_token]}"
+                  else
+                    provider = MsRestAzure::ApplicationTokenProvider.new(
+                      config[:tenant_id],
+                      config[:client_id],
+                      config[:client_secret]
+                    )
+
+                    provider.get_authentication_header
+                  end
 
     begin
       url = "https://management.azure.com#{resource}/providers/microsoft.insights/metrics?" \
@@ -220,7 +251,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
 
       res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         req = Net::HTTP::Get.new(uri)
-        req['Authorization'] = provider.get_authentication_header
+        req['Authorization'] = auth_header
         req['Content-Type'] = 'application/json'
         http.request(req)
       end
@@ -270,15 +301,12 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
 
   def timespan
     # 10 min.  This should be enough time to capture the last value, without wasting API credits
-    start_date = Time.now.utc - 600
-    end_date = Time.now.utc
+    start_date = Time.now - 600
+    end_date = Time.now
     "#{start_date.strftime(DATE_FORMAT)}/#{end_date.strftime(DATE_FORMAT)}"
   end
 
   def handle_response(res)
-    case res
-    when !Net::HTTPSuccess then
-      critical "Failed to get metric:\n#{res.body}"
-    end
+    critical "Failed to get metric:\n#{res.body}" if res.code.to_i >= 300
   end
 end
