@@ -58,6 +58,12 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          long: '--subscription ID',
          default: ENV['ARM_SUBSCRIPTION_ID']
 
+  option :resource_name,
+         description:  'The name of the resource.  If given, the resource namespace/type/group along with subscription id are also required.',
+         short: '-e NAME',
+         long: '--resource-name NAME',
+         default: ''
+
   option :resource_type,
          description: 'Resource Type.  If specified, the resource should contain the name and not the full id, and the ' \
                       'resource namespace/group and subscriptions are also required. Note:  This should not contain the ' \
@@ -85,11 +91,11 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          default: ''
 
   # example id: /subscriptions/576b7196-d42b-4b63-b696-af3ff33269a7/resourceGroups/test-group-1/providers/Microsoft.Network/virtualNetworkGateways/test-gateway
-  option :resource,
-         description:  'Either the full id or name of the resource.  If the name is given, then resource type/namespace/group and subscription are required.',
+  option :resource_id,
+         description:  'The full id of the resource.  If given, the resource namespace/type/group along with subscription id are ignored.',
          short: '-r ID',
-         long: '--resource ID',
-         required: true
+         long: '--resource-id ID',
+         default: ''
 
   option :metric,
          description:  'The name of the metric',
@@ -139,12 +145,16 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   end
 
   def run
+    if config[:resource_id].to_s.empty? && config[:resource_name].to_s.empty?
+      unknown 'resource id or resource name/group/type/namespece and subscription id must be provided'
+    end
+
     if !config[:critical_over] && !config[:warning_over] && !config[:critical_under] && !config[:warning_under]
-      critical 'At least one threshold must be provided.'
+      unknown 'At least one threshold must be provided.'
     end
 
     if last_metric_values.empty?
-      unknown "There are no metric values for #{config[:metric]} on resource #{config[:resource]} with aggregation #{config[:aggregation]}"
+      unknown "There are no metric values for #{config[:metric]} on resource #{config[:resource_id] || config[:resource_name]} with aggregation #{config[:aggregation]}"
     else
       last_metric_values.each do |metric_val|
         if config[:critical_over] && metric_val[:value] > config[:critical_over].to_f
@@ -233,7 +243,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   end
 
   def build_resource
-    if !config[:resource_type].to_s.empty? || !config[:resource_namespace].to_s.empty? || !config[:resource_group].to_s.empty?
+    if !config[:resource_name].to_s.empty?
 
       if config[:resource_type].to_s.empty? ||
          config[:resource_namespace].to_s.empty? ||
@@ -243,10 +253,10 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
         unknown 'If resource type, namespace, or group is given, then all are required along with the subscription id.'
       else
         "/subscriptions/#{config[:subscription_id]}/resourceGroups/#{config[:resource_group]}/" \
-          "providers/#{resource_type}/#{config[:resource]}"
+          "providers/#{resource_type}/#{config[:resource_name]}"
       end
     else
-      config[:resource].start_with?('/') ? config[:resource] : '/' + config[:resource]
+      config[:resource_id].start_with?('/') ? config[:resource_id] : '/' + config[:resource_id]
     end
   end
 

@@ -13,7 +13,7 @@ describe 'check monitor metric script' do
   subject(:check_instance) { CheckAzurermMonitorMetric.new(script_args) }
   let(:script_args) do
     args = [
-      '--resource', resource_id,
+      '--resource-id', resource_id,
       '--metric', metric_name,
       '--critical', critical,
       '--warning', warning,
@@ -270,7 +270,7 @@ describe 'check monitor metric script' do
   context 'When tenant, client, secret, and subscription given' do
     let(:script_args) do
       [
-        '--resource', resource_id,
+        '--resource-id', resource_id,
         '--metric', metric_name,
         '--critical', critical,
         '--tenant', tenant,
@@ -297,7 +297,7 @@ describe 'check monitor metric script' do
   context 'When no thresholds given' do
     let(:script_args) do
       [
-        '--resource', resource_id,
+        '--resource-id', resource_id,
         '--metric', metric_name
       ]
     end
@@ -305,7 +305,7 @@ describe 'check monitor metric script' do
     it 'Returns an error' do
       check_instance.run
 
-      expect(check_instance).to have_received(:critical)
+      expect(check_instance).to have_received(:unknown)
     end
   end
 
@@ -363,7 +363,7 @@ describe 'check monitor metric script' do
   context 'When subscription, resource type, namespace, and group given' do
     let(:script_args) do
       [
-        '--resource', resource_name,
+        '--resource-name', resource_name,
         '--subscription', subscription,
         '--resource-type', resource_type,
         '--resource-namespace', resource_namespace,
@@ -394,7 +394,7 @@ describe 'check monitor metric script' do
     context 'And parent given' do
       let(:script_args) do
         [
-          '--resource', resource_name,
+          '--resource-name', resource_name,
           '--subscription', subscription,
           '--resource-type', resource_type,
           '--resource-namespace', resource_namespace,
@@ -424,6 +424,17 @@ describe 'check monitor metric script' do
         # this is needed since the call to unknown that would normally stop execution is mocked out.
         # Therefore, it still makes the URL call, so make sure it returns a correct value always.
         stub_request(:get, /.*management.azure.com.*/).to_return(body: JSON.dump(metric_resp))
+      end
+
+      context 'if neither resource id nor resource name given' do
+        let(:resource_name) { '' }
+        let(:resource_id) { '' }
+
+        it 'Returns unknown' do
+          check_instance.run
+
+          expect(check_instance).to have_received(:unknown)
+        end
       end
 
       context 'And namespace not given' do
