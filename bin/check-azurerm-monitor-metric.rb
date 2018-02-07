@@ -301,8 +301,8 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
 
   def timespan
     # 10 min.  This should be enough time to capture the last value, without wasting API credits
-    start_date = Time.now - 600
-    end_date = Time.now
+    start_date = Time.now.utc - 600
+    end_date = Time.now.utc
     "#{start_date.strftime(DATE_FORMAT)}/#{end_date.strftime(DATE_FORMAT)}"
   end
 
