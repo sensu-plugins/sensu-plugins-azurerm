@@ -151,12 +151,6 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          long: '--critical-under CRIT',
          proc: proc { |val| val.to_i }
 
-  def parse_dimensions(val)
-    val.split(',')
-       .collect { |dim_str| dim_str.split '=' }
-       .collect { |dim_arr| { name: dim_arr[0], value: dim_arr[1] } }
-  end
-
   def run
     if config[:resource_id].to_s.empty? && config[:resource_name].to_s.empty?
       unknown 'resource id or resource name/group/type/namespece and subscription id must be provided'
