@@ -33,7 +33,6 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   AZURE_API_VER = '2017-05-01-preview'.freeze
   DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'.freeze
 
-
   option :tenant_id,
          description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
          short: '-t ID',
