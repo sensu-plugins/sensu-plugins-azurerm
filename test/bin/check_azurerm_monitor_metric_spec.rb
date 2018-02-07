@@ -45,10 +45,9 @@ describe 'check monitor metric script' do
     url
   end
   let(:timespan) do
-    start_date = Time.now - 600
-    end_date = Time.now
-
-    "#{start_date.iso8601}/#{end_date.iso8601}"
+    start_date = Time.now.utc - 600
+    end_date = Time.now.utc
+    "#{start_date.strftime(CheckAzurermMonitorMetric::DATE_FORMAT)}/#{end_date.strftime(CheckAzurermMonitorMetric::DATE_FORMAT)}"
   end
 
   let(:aggregation) { 'average' }

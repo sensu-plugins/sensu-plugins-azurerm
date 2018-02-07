@@ -31,6 +31,8 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
 
   AZURE_API_VER = '2017-05-01-preview'.freeze
+  DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'.freeze
+
 
   option :tenant_id,
          description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
@@ -258,9 +260,9 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
 
   def timespan
     # 10 min.  This should be enough time to capture the last value, without wasting API credits
-    start_date = Time.now - 600
-    end_date = Time.now
-    "#{start_date.iso8601}/#{end_date.iso8601}"
+    start_date = Time.now.utc - 600
+    end_date = Time.now.utc
+    "#{start_date.strftime(DATE_FORMAT)}/#{end_date.strftime(DATE_FORMAT)}"
   end
 
   def handle_response(res)
