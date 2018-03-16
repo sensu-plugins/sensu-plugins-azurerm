@@ -41,7 +41,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
 
   option :client_id,
          description: 'ARM Client ID. Either set ENV[\'ARM_CLIENT_ID\'] or provide it as an option',
-         short: '-c ID',
+         short: '-i ID',
          long: '--client ID',
          default: ENV['ARM_CLIENT_ID']
 

@@ -26,6 +26,7 @@
  - check-azurerm-virtual-network-gateway-connected.rb
  - check-azurerm-virtual-network-gateway-failover-connected.rb
  - check-azurerm-virtual-networks-usage.rb
+ - check-azurerm-monitor-metric.rb
  - metric-azurerm-service-bus-subscription-message-count.rb
  - metric-azurerm-virtual-network-gateway-usage.rb
 
@@ -51,6 +52,7 @@
 * /bin/check-azurerm-virtual-networks-usage.rb
 * /bin/metric-azurerm-service-bus-subscription-message-count.rb
 * /bin/metric-azurerm-virtual-network-gateway-usage.rb
+* /bin/check-azurerm-monitor-metric.rb
 
 
 ## Usage
@@ -426,6 +428,24 @@
                                           -location "westeurope"
                                           -warning_percentage 80
                                           -critical_percentage 90
+```
+
+**check-azurerm-monitor-metric.rb**
+```
+./check-azurerm-monitor-metric.rb --use-assigned-identity 
+                                  --resource-id "id"
+                                  --metric "metricname"
+                                  --warning 80
+                                  --critical 90
+
+./check-azurerm-monitor-metric.rb --tenant "00000000-0000-0000-0000-000000000000" 
+                                  --client "00000000-0000-0000-0000-000000000000"
+                                  --clientSecret "00000000-0000-0000-0000-000000000000"
+                                  --resource-id "id"
+                                  --metric "metricname"
+                                  --warning-under 80
+                                  --critical-under 50
+
 ```
 
 **metric-azurerm-service-bus-subscription-message-count.rb**
