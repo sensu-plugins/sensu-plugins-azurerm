@@ -5,6 +5,9 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+## [2.1.0] - 2018-03-16
+- added monitoring metric check
+
 ### Changed
 - updated `.gemspec` to reflect new url after transfer (@majormoses)
 
