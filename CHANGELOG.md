@@ -5,8 +5,8 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
-## [2.1.0] - 2018-03-16
-- added monitoring metric check
+### Added
+- check-azurerm-monitor-metric.rb: allows you to check against azure metric thresholds for a particular resource id or name (@thomaslitton)
 
 ### Changed
 - updated `.gemspec` to reflect new url after transfer (@majormoses)
