@@ -62,7 +62,14 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          description: 'Port used to authenticate when using the local identity via Managed Service Identity (MSI)',
          short: '-o PORT',
          long: '--local-auth-port PORT',
-         default: '50342'
+         proc: proc(&:to_i),
+         default: 50_342
+
+  option :assigned_identity_resource,
+         description: 'The resource to use when retrieving credentials.  Only used if the --use-assigned-identity option is used.',
+         short: '-u RESOURCE_URL',
+         long: '--assigned-identity-resource',
+         default: 'https://management.azure.com/'
 
   option :subscription_id,
          description: 'ARM Subscription ID',
@@ -150,8 +157,22 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          long: '--critical-under CRIT',
          proc: proc { |val| val.to_i }
 
+  option :base_url,
+         description: 'The Azure resource API URL.',
+         short: '-b URL',
+         long: '--base-url URL',
+         default: 'https://management.azure.com',
+         proc: proc { |val| val.chomp('/') }
+
+  option :lookback_period,
+         description:  'The amount of time (in seconds) from the current time to look back when retrieving the metric.  This should be long enough to capture the last value submitted.',
+         short: '-k PERIOD',
+         long: '--look-back-period PERIOD',
+         default: 600, # 10 min.  This should generally be enough time to capture the last value, without wasting API credits
+         proc: proc { |val| val.to_i }
+
   def run
-    if config[:resource_id].to_s.empty? && config[:resource_name].to_s.empty?
+    if missing_resource_info?
       unknown 'resource id or resource name/group/type/namespece and subscription id must be provided'
     end
 
@@ -178,6 +199,10 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
     end
   end
 
+  def missing_resource_info?
+    config[:resource_id].to_s.empty? && config[:resource_name].to_s.empty?
+  end
+
   def last_metric_values
     @last_metric_values ||= find_last_metric_values
   end
@@ -191,9 +216,9 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
 
       metric_resp_value[:timeseries].each do |ts|
         ts[:data].reverse_each do |metric_value|
-          if metric_value[config[:aggregation].to_sym]
+          if metric_value[metric_value_key]
             values << {
-              value: metric_value[config[:aggregation].to_sym].to_f,
+              value: metric_value[metric_value_key].to_f,
               metric_name: name
             }
 
@@ -206,9 +231,13 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
     values
   end
 
+  def metric_value_key
+    config[:aggregation].to_sym
+  end
+
   def metric_response
     auth_header = if config[:use_assigned_identity]
-                    uri = URI.parse("http://localhost:#{config[:local_auth_port]}/oauth2/token?resource=https://management.azure.com/")
+                    uri = URI.parse("http://localhost:#{config[:local_auth_port]}/oauth2/token?resource=#{config[:assigned_identity_resource]}")
 
                     res = Net::HTTP.start(uri.host, uri.port, use_ssl: false) do |http|
                       req = Net::HTTP::Get.new(uri)
@@ -232,7 +261,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
                   end
 
     begin
-      url = "https://management.azure.com#{resource}/providers/microsoft.insights/metrics?" \
+      url = "#{config[:base_url]}#{resource}/providers/microsoft.insights/metrics?" \
         "api-version=#{AZURE_API_VER}&" \
         "metric=#{config[:metric]}&" \
         "timespan=#{CGI.escape(timespan)}&" \
@@ -293,8 +322,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   end
 
   def timespan
-    # 10 min.  This should be enough time to capture the last value, without wasting API credits
-    start_date = Time.now.utc - 600
+    start_date = Time.now.utc - config[:lookback_period]
     end_date = Time.now.utc
     "#{start_date.strftime(DATE_FORMAT)}/#{end_date.strftime(DATE_FORMAT)}"
   end
