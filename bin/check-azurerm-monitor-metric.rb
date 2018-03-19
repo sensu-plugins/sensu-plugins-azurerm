@@ -172,9 +172,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          proc: proc { |val| val.to_i }
 
   def run
-    if missing_resource_info?
-      unknown 'resource id or resource name/group/type/namespece and subscription id must be provided'
-    end
+    check_missing_resource_info
 
     if !config[:critical_over] && !config[:warning_over] && !config[:critical_under] && !config[:warning_under]
       unknown 'At least one threshold must be provided.'
@@ -199,8 +197,33 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
     end
   end
 
-  def missing_resource_info?
-    config[:resource_id].to_s.empty? && config[:resource_name].to_s.empty?
+  def check_missing_resource_info
+    return_missing_resource if missing_resource_id? && missing_resource_name_info?
+  end
+
+  def missing_resource_id?
+    config[:resource_id].to_s.empty?
+  end
+
+  def missing_resource_name_info?
+    config[:resource_name].to_s.empty? ||
+      config[:resource_type].to_s.empty? ||
+      config[:resource_namespace].to_s.empty? ||
+      config[:resource_group].to_s.empty? ||
+      config[:subscription_id].to_s.empty?
+  end
+
+  def return_missing_resource
+    unknown(
+      "Either the resource id is required OR the resource name, resource group, resource namepsace, resource type and subscription id are required.\n"\
+      "Resource id: #{config[:resource_id]}\n"\
+      "Resource Info:\n"\
+      "Name: #{config[:resource_name]}\n"\
+      "Group: #{config[:resource_group]}\n"\
+      "Namespace: #{config[:resource_namespace]}\n"\
+      "Type: #{config[:resource_type]}\n"\
+      "Subscription ID: #{config[:subscription_id]}"
+    )
   end
 
   def last_metric_values
@@ -296,20 +319,11 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   end
 
   def build_resource
-    if !config[:resource_name].to_s.empty?
-
-      if config[:resource_type].to_s.empty? ||
-         config[:resource_namespace].to_s.empty? ||
-         config[:resource_group].to_s.empty? ||
-         config[:subscription_id].to_s.empty?
-
-        unknown 'If resource type, namespace, or group is given, then all are required along with the subscription id.'
-      else
-        "/subscriptions/#{config[:subscription_id]}/resourceGroups/#{config[:resource_group]}/" \
-          "providers/#{resource_type}/#{config[:resource_name]}"
-      end
-    else
+    if !config[:resource_id].to_s.empty?
       config[:resource_id].start_with?('/') ? config[:resource_id] : '/' + config[:resource_id]
+    else
+      "/subscriptions/#{config[:subscription_id]}/resourceGroups/#{config[:resource_group]}/" \
+        "providers/#{resource_type}/#{config[:resource_name]}"
     end
   end
 
