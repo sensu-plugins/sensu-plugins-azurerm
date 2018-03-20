@@ -214,6 +214,10 @@ describe 'check monitor metric script' do
   end
 
   context 'When response has multiple time series' do
+    RSpec::Matchers.define :has_lines do |lines|
+      match { |actual| actual.split("\n").length == lines }
+    end
+
     let(:value_obj) do
       {
         id: '/subscriptions/576b7196-d42b-4b63-b696-af3ff33269a7/resourceGroups/test-group-1/providers/Microsoft.Network/virtualNetworkGateways/test-gateway/providers/Microsoft.Insights/metrics/TunnelAverageBandwidth',
@@ -234,7 +238,7 @@ describe 'check monitor metric script' do
           {
             data: [
               {
-                average: '1.0',
+                average: '5.0',
                 timeStamp: '2018-01-26T16:56:00+00:00'
               }
             ]
@@ -243,10 +247,10 @@ describe 'check monitor metric script' do
       }
     end
 
-    it 'Checks the last value in each time series' do
+    it 'All time series is checked' do
       check_instance.run
 
-      expect(check_instance).to have_received(:critical)
+      expect(check_instance).to have_received(:critical).with(has_lines(2))
     end
   end
 

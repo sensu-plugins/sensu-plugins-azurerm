@@ -181,18 +181,27 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
     if last_metric_values.empty?
       unknown "There are no metric values for #{config[:metric]} on resource #{config[:resource_id] || config[:resource_name]} with aggregation #{config[:aggregation]}"
     else
+      critical_messages = []
+      warning_messages = []
+
       last_metric_values.each do |metric_val|
         if config[:critical_over] && metric_val[:value] > config[:critical_over].to_f
-          critical "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+          critical_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
         elsif config[:warning_over] && metric_val[:value] > config[:warning_over].to_f
-          warning "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+          warning_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
         elsif config[:critical_under] && metric_val[:value] < config[:critical_under].to_f
-          critical "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+          critical_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
         elsif config[:warning_under] && metric_val[:value] < config[:warning_under].to_f
-          warning "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
-        else
-          ok "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+          warning_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
         end
+      end
+
+      if !critical_messages.empty?
+        critical critical_messages.join("\n")
+      elsif !warning_messages.empty?
+        warning warning_messages.join("\n")
+      else
+        ok 'Metric(s) are within thresholds'
       end
     end
   end
