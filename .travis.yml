@@ -6,8 +6,6 @@ cache:
 install:
 - bundle install
 rvm:
-- 2.1
-- 2.2
 - 2.3.0
 - 2.4.1
 notifications:
@@ -29,8 +27,6 @@ deploy:
   gem: sensu-plugins-azurerm
   on:
     tags: true
-    rvm: 2.1
-    rvm: 2.2
     rvm: 2.3.0
     rvm: 2.4.1
     repo: sensu-plugins/sensu-plugins-azurerm

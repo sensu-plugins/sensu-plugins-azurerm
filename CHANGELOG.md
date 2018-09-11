@@ -5,6 +5,15 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+### Security
+- updated `yard` dependency to `~> 0.9.11` per: https://nvd.nist.gov/vuln/detail/CVE-2017-17042 which closes attacks against a yard server loading arbitrary files (@majormoses)
+
+### Breaking Changes
+- removed ruby support for `< 2.3` (@majormoses)
+
+### Changed
+- bumped minumum dependency of `sensu-plugin` to 2.5 (@majormoses)
+
 ## [2.1.0] - 2018-09-10
 ### Added
 - check-azurerm-monitor-metric.rb: allows you to check against azure metric thresholds for a particular resource id or name (@thomaslitton)
