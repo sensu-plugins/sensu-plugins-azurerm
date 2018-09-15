@@ -5,6 +5,7 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+## [3.0.0] - 2018-09-15
 ### Security
 - updated `yard` dependency to `~> 0.9.11` per: https://nvd.nist.gov/vuln/detail/CVE-2017-17042 which closes attacks against a yard server loading arbitrary files (@majormoses)
 
@@ -93,7 +94,8 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/2.1.0..HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/3.0.0..HEAD
+[3.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/2.1.0..3.0.0
 [2.1.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/1.0.0..2.0.0
 [1.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/0.0.5...1.0.0
