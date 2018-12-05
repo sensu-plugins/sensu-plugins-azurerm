@@ -31,7 +31,7 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.add_runtime_dependency 'azure_mgmt_network', '0.8.0'
   s.add_runtime_dependency 'azure_mgmt_service_bus', '0.8.0'
   s.add_runtime_dependency 'ms_rest_azure',      '~> 0.6.2'
-  s.add_runtime_dependency 'sensu-plugin',       '~> 2.5'
+  s.add_runtime_dependency 'sensu-plugin',       '>= 2.5', '< 4.0'
 
   s.add_development_dependency 'bundler',                   '~> 1.7'
   s.add_development_dependency 'codeclimate-test-reporter', '~> 0.4'
