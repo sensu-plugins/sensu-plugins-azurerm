@@ -127,11 +127,15 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          short: '-f FILTER',
          long: '--filter FILTER'
 
-  option :aggregation,
-         description:  'Aggregation.  This can be Average, Count, Maximum, Minimum, Total',
+  option :request_aggregation,
+         description:  'Used as a parameter to the HTTP request sent to Azure.   This can be Average, Count, Maximum, Minimum, Total',
          short: '-a aggregation',
          long: '--aggregation aggregation',
          default: 'average'
+                   
+  option :aggregate_results,
+         description: 'Aggregate the result data points to compare against alert conditions.   This can be Average, Count, Maximum, Minimum, Total',
+         long: '--aggregate_results aggregation_type'
 
   option :warning_over,
          description: 'The warning threshold to check if the metric is forecasted to go over.',
@@ -178,31 +182,35 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
       unknown 'At least one threshold must be provided.'
     end
 
-    if last_metric_values.empty?
-      unknown "There are no metric values for #{config[:metric]} on resource #{config[:resource_id] || config[:resource_name]} with aggregation #{config[:aggregation]}"
-    else
-      critical_messages = []
-      warning_messages = []
+    if !config[:aggregate_results]
+      if last_metric_values.empty?
+        unknown "There are no metric values for #{config[:metric]} on resource #{config[:resource_id] || config[:resource_name]} with aggregation #{config[:aggregation]}"
+      else
+        critical_messages = []
+        warning_messages = []
 
-      last_metric_values.each do |metric_val|
-        if config[:critical_over] && metric_val[:value] > config[:critical_over].to_f
-          critical_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
-        elsif config[:warning_over] && metric_val[:value] > config[:warning_over].to_f
-          warning_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
-        elsif config[:critical_under] && metric_val[:value] < config[:critical_under].to_f
-          critical_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
-        elsif config[:warning_under] && metric_val[:value] < config[:warning_under].to_f
-          warning_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+        last_metric_values.each do |metric_val|
+          if config[:critical_over] && metric_val[:value] > config[:critical_over].to_f
+            critical_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+          elsif config[:warning_over] && metric_val[:value] > config[:warning_over].to_f
+            warning_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+          elsif config[:critical_under] && metric_val[:value] < config[:critical_under].to_f
+            critical_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+          elsif config[:warning_under] && metric_val[:value] < config[:warning_under].to_f
+            warning_messages << "Metric #{metric_val[:metric_name]} is #{metric_val[:value]}"
+          end
+        end
+
+        if !critical_messages.empty?
+          critical critical_messages.join("\n")
+        elsif !warning_messages.empty?
+          warning warning_messages.join("\n")
+        else
+          ok 'Metric(s) are within thresholds'
         end
       end
-
-      if !critical_messages.empty?
-        critical critical_messages.join("\n")
-      elsif !warning_messages.empty?
-        warning warning_messages.join("\n")
-      else
-        ok 'Metric(s) are within thresholds'
-      end
+    else
+      verify_results_with_aggregation
     end
   end
 
@@ -264,7 +272,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   end
 
   def metric_value_key
-    config[:aggregation].to_sym
+    config[:request_aggregation].to_sym
   end
 
   def metric_response
@@ -297,7 +305,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
         "api-version=#{AZURE_API_VER}&" \
         "metric=#{config[:metric]}&" \
         "timespan=#{CGI.escape(timespan)}&" \
-        "aggregation=#{config[:aggregation]}"
+        "aggregation=#{config[:request_aggregation]}"
 
       url += "&$filter=#{CGI.escape(config[:filter])}" if config[:filter]
 
@@ -352,5 +360,84 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
 
   def handle_response(res)
     critical "Failed to get metric:\n#{res.body}" if res.code.to_i >= 300
+  end
+    
+  def verify_results_with_aggregation
+    request_values = get_request_values
+
+    aggregated_value = aggregate_request_values(request_values, config[:aggregate_results])
+
+    error_type = verify_result(aggregated_value)
+
+    return_error_message(error_type, request_values[0][:name], aggregated_value)
+  end
+
+  def get_request_values
+    values = []
+    metric_response[:value].each do |metric_resp_value|
+      name = metric_resp_value[:name] ? metric_resp_value[:name][:value] : ''
+
+      next if metric_resp_value[:timeseries].empty?
+
+      metric_resp_value[:timeseries].each do |ts|
+        ts[:data].each do |metric_value|
+          if metric_value[metric_value_key]
+            values << {
+              value: metric_value[metric_value_key].to_f,
+              name: name
+            }
+          end
+        end
+      end
+    end
+    values
+  end 
+    
+  def aggregate_request_values(request_values, aggregation_type)
+    result_values = []
+
+    request_values.each do |metric_val|
+      result_values.push(metric_val[:value])
+    end
+    
+    case aggregation_type
+      when "average"
+        result_value = result_values.inject{ |sum, el| sum + el}.to_f / result_values.size
+      when "maximum"
+        result_value = result_values.max
+      when "minimum"
+        result_value = result_values.min
+      when "total"
+        result_value = result_values.inject(0){|sum,x| sum + x }
+      when "count"
+        result_value = result_values.size
+    end
+    result_value
+  end      
+    
+  def verify_result(aggregated_value)
+    error_type = "none"
+    if config[:critical_over] && aggregated_value > config[:critical_over].to_f
+      error_type = "critical"
+    elsif config[:warning_over] && aggregated_value > config[:warning_over].to_f
+      error_type = "warning"
+    elsif config[:critical_under] && aggregated_value < config[:critical_under].to_f
+      error_type = "critical"
+    elsif config[:warning_under] && aggregated_value < config[:warning_under].to_f
+      error_type = "warning"
+    end
+    error_type
+  end
+
+  def return_error_message(type, metric_name, aggregated_value)
+    message = "Metric #{metric_name} is #{aggregated_value}"
+    case type
+      when "none"
+        ok "Metric(s) are within thresholds"
+      when "warning"
+        warning message
+      when "critical"
+        critical message
+    end
   end
 end
