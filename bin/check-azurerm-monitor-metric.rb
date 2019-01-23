@@ -430,7 +430,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   end
 
   def return_error_message(type, metric_name, aggregated_value)
-    message = 'Metric #{metric_name} is #{aggregated_value}'
+    message = "Metric #{metric_name} is #{aggregated_value}"
     case type
     when 'none'
       ok 'Metric(s) are within thresholds'
