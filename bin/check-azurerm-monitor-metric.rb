@@ -408,7 +408,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
     when 'minimum'
       result_value = result_values.min
     when 'total'
-      result_value = result_values.inject(0) {|sum, x| sum + x }
+      result_value = result_values.inject(0) { |sum, x| sum + x }
     when 'count'
       result_value = result_values.size
     end
