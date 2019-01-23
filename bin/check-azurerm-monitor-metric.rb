@@ -132,7 +132,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          short: '-a aggregation',
          long: '--aggregation aggregation',
          default: 'average'
-                   
+
   option :aggregate_results,
          description: 'Aggregate the result data points to compare against alert conditions.   This can be Average, Count, Maximum, Minimum, Total',
          long: '--aggregate_results aggregation_type'
@@ -361,9 +361,9 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   def handle_response(res)
     critical "Failed to get metric:\n#{res.body}" if res.code.to_i >= 300
   end
-    
+
   def verify_results_with_aggregation
-    request_values = get_request_values
+    request_values = extract_request_values
 
     aggregated_value = aggregate_request_values(request_values, config[:aggregate_results])
 
@@ -372,7 +372,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
     return_error_message(error_type, request_values[0][:name], aggregated_value)
   end
 
-  def get_request_values
+  def extract_request_values
     values = []
     metric_response[:value].each do |metric_resp_value|
       name = metric_resp_value[:name] ? metric_resp_value[:name][:value] : ''
@@ -391,30 +391,30 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
       end
     end
     values
-  end 
-    
+  end
+
   def aggregate_request_values(request_values, aggregation_type)
     result_values = []
 
     request_values.each do |metric_val|
       result_values.push(metric_val[:value])
     end
-    
+
     case aggregation_type
     when 'average'
-      result_value = result_values.inject{ |sum, el| sum + el}.to_f / result_values.size
+      result_value = result_values.inject { |sum, el| sum + el }.to_f / result_values.size
     when 'maximum'
       result_value = result_values.max
     when 'minimum'
       result_value = result_values.min
     when 'total'
-      result_value = result_values.inject(0){|sum,x| sum + x }
+      result_value = result_values.inject(0) {|sum, x| sum + x }
     when 'count'
       result_value = result_values.size
     end
     result_value
-  end      
-    
+  end
+
   def verify_result(aggregated_value)
     error_type = 'none'
     if config[:critical_over] && aggregated_value > config[:critical_over].to_f
