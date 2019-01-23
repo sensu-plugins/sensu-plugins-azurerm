@@ -401,43 +401,43 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
     end
     
     case aggregation_type
-      when "average"
-        result_value = result_values.inject{ |sum, el| sum + el}.to_f / result_values.size
-      when "maximum"
-        result_value = result_values.max
-      when "minimum"
-        result_value = result_values.min
-      when "total"
-        result_value = result_values.inject(0){|sum,x| sum + x }
-      when "count"
-        result_value = result_values.size
+    when 'average'
+      result_value = result_values.inject{ |sum, el| sum + el}.to_f / result_values.size
+    when 'maximum'
+      result_value = result_values.max
+    when 'minimum'
+      result_value = result_values.min
+    when 'total'
+      result_value = result_values.inject(0){|sum,x| sum + x }
+    when 'count'
+      result_value = result_values.size
     end
     result_value
   end      
     
   def verify_result(aggregated_value)
-    error_type = "none"
+    error_type = 'none'
     if config[:critical_over] && aggregated_value > config[:critical_over].to_f
-      error_type = "critical"
+      error_type = 'critical'
     elsif config[:warning_over] && aggregated_value > config[:warning_over].to_f
-      error_type = "warning"
+      error_type = 'warning'
     elsif config[:critical_under] && aggregated_value < config[:critical_under].to_f
-      error_type = "critical"
+      error_type = 'critical'
     elsif config[:warning_under] && aggregated_value < config[:warning_under].to_f
-      error_type = "warning"
+      error_type = 'warning'
     end
     error_type
   end
 
   def return_error_message(type, metric_name, aggregated_value)
-    message = "Metric #{metric_name} is #{aggregated_value}"
+    message = 'Metric #{metric_name} is #{aggregated_value}'
     case type
-      when "none"
-        ok "Metric(s) are within thresholds"
-      when "warning"
-        warning message
-      when "critical"
-        critical message
+    when 'none'
+      ok 'Metric(s) are within thresholds'
+    when 'warning'
+      warning message
+    when 'critical'
+      critical message
     end
   end
 end
