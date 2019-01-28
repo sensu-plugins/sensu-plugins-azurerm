@@ -132,13 +132,13 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          short: '-a aggregation',
          long: '--aggregation aggregation',
          default: 'average',
-         in: %w(average count maximum minimum total)
+         in: %w[average count maximum minimum total]
 
   option :aggregate_results,
          description: 'Aggregate the result data points to compare against alert conditions.   This can be average, count, maximum, minimum, total',
          long: '--aggregate_results aggregation_type',
          default: 'none',
-         in: %w(average count maximum minimum total none)
+         in: %w[average count maximum minimum total none]
 
   option :warning_over,
          description: 'The warning threshold to check if the metric is forecasted to go over.',
