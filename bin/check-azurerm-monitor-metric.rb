@@ -128,14 +128,17 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          long: '--filter FILTER'
 
   option :request_aggregation,
-         description:  'Used as a parameter to the HTTP request sent to Azure.   This can be Average, Count, Maximum, Minimum, Total',
+         description:  'Used as a parameter to the HTTP request sent to Azure.   This can be average, count, maximum, minimum, total',
          short: '-a aggregation',
          long: '--aggregation aggregation',
-         default: 'average'
+         default: 'average',
+         in: %w(average count maximum minimum total)
 
   option :aggregate_results,
-         description: 'Aggregate the result data points to compare against alert conditions.   This can be Average, Count, Maximum, Minimum, Total',
-         long: '--aggregate_results aggregation_type'
+         description: 'Aggregate the result data points to compare against alert conditions.   This can be average, count, maximum, minimum, total',
+         long: '--aggregate_results aggregation_type',
+         default: 'none',
+         in: %w(average count maximum minimum total none)
 
   option :warning_over,
          description: 'The warning threshold to check if the metric is forecasted to go over.',
@@ -182,7 +185,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
       unknown 'At least one threshold must be provided.'
     end
 
-    if !config[:aggregate_results]
+    if config[:aggregate_results] == 'none'
       if last_metric_values.empty?
         unknown "There are no metric values for #{config[:metric]} on resource #{config[:resource_id] || config[:resource_name]} with aggregation #{config[:aggregation]}"
       else
