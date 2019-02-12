@@ -42,7 +42,7 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.add_development_dependency 'mixlib-shellout',           ['< 2.3.0', '~> 2.2']
   s.add_development_dependency 'pry',                       '~> 0.10'
   s.add_development_dependency 'rake',                      '~> 12.3'
-  s.add_development_dependency 'rdoc',                      '~> 5.1'
+  s.add_development_dependency 'rdoc',                      '~> 6.1'
   s.add_development_dependency 'redcarpet',                 '~> 3.2'
   s.add_development_dependency 'rspec',                     '~> 3.4'
   s.add_development_dependency 'rubocop',                   '~> 0.51.0'
