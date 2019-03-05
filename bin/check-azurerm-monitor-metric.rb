@@ -370,9 +370,9 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
 
     aggregated_value = aggregate_request_values(request_values, config[:aggregate_results])
 
-    error_type = verify_result(aggregated_value)
+    results_type = verify_result(aggregated_value)
 
-    return_error_message(error_type, request_values[0][:name], aggregated_value)
+    exits_with_message(results_type, request_values[0][:name], aggregated_value)
   end
 
   def extract_request_values
@@ -419,20 +419,20 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   end
 
   def verify_result(aggregated_value)
-    error_type = 'none'
+    results_type = 'none'
     if config[:critical_over] && aggregated_value > config[:critical_over].to_f
-      error_type = 'critical'
+      results_type = 'critical'
     elsif config[:warning_over] && aggregated_value > config[:warning_over].to_f
-      error_type = 'warning'
+      results_type = 'warning'
     elsif config[:critical_under] && aggregated_value < config[:critical_under].to_f
-      error_type = 'critical'
+      results_type = 'critical'
     elsif config[:warning_under] && aggregated_value < config[:warning_under].to_f
-      error_type = 'warning'
+      results_type = 'warning'
     end
-    error_type
+    results_type
   end
 
-  def return_error_message(type, metric_name, aggregated_value)
+  def exits_with_message(type, metric_name, aggregated_value)
     message = "Metric #{metric_name} is #{aggregated_value}"
     case type
     when 'none'

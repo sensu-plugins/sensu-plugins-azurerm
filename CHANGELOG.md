@@ -5,8 +5,9 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+## [3.1.0] - 2019-03-04
 ### Added
-- check-azurerm-monitor-metric.rb: added an option that allows users to aggregate results returned from Azure DB query
+- check-azurerm-monitor-metric.rb: added `--aggregate_results aggregation_type TYPE` option that allows users to aggregate results returned from Azure DB query @MrMisa93
 
 ## [3.0.0] - 2018-09-15
 ### Security
@@ -97,7 +98,8 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/3.0.0..HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/3.1.0..HEAD
+[3.1.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/3.0.0..3.1.0
 [3.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/2.1.0..3.0.0
 [2.1.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/1.0.0..2.0.0
