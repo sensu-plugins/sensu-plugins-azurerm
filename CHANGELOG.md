@@ -5,6 +5,10 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+### Added 
+- Added Bonsai pieces
+- Added Assets to README
+
 ### Changed
 - Updated ms_rest_azure to ['>= 0.6.2', '< 0.12.0']
 - Updated sensu-plugin to ['~> 2.5', '< 5.0']
@@ -16,7 +20,6 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 - Updated serverspec to '~> 2.41.5'
 - Updated yard to '~> 0.9.20'
 - Remediated any new warnings from updated rubocop
-
 
 ## [3.1.0] - 2019-03-04
 ### Added
