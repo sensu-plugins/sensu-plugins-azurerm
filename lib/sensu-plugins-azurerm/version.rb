@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SensuPluginsAzureRM
   module Version
     MAJOR = 3

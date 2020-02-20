@@ -1,4 +1,6 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
+
 #
 # check-azurerm-service-bus-topic-size
 #
@@ -116,7 +118,7 @@ class CheckAzureRMServiceBusTopicSize < Sensu::Plugin::Check::CLI
 
     max_size_in_bytes = result.max_size_in_megabytes * 1024 * 1024
     current_size = result.size_in_bytes
-    percentage_used = (current_size.to_f / max_size_in_bytes.to_f) * 100
+    percentage_used = (current_size.to_f / max_size_in_bytes) * 100
 
     message = "Current size of topic '#{topic_name}' is #{percentage_used}"
 

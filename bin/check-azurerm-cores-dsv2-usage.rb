@@ -1,4 +1,6 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
+
 #
 # check-azurerm-cores-dsv2-usage
 #
@@ -104,7 +106,7 @@ class CheckAzureRMCoresDSv2Usage < Sensu::Plugin::Check::CLI
 
     message = "Current usage: #{current_usage} of #{allowance} DSv2 Family Cores"
 
-    percentage_used = (current_usage.to_f / allowance.to_f) * 100
+    percentage_used = (current_usage.to_f / allowance) * 100
 
     if percentage_used >= critical_percentage
       critical message

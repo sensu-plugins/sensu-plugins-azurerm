@@ -5,6 +5,19 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+### Changed
+- Updated ms_rest_azure to ['>= 0.6.2', '< 0.12.0']
+- Updated sensu-plugin to ['~> 2.5', '< 5.0']
+- Updated bundler to '~> 2.1'
+- Updated codeclimate-test-reporter to '~> 1.0'
+- Updated mixlib-shellout to ['~> 2.2', '< 3.1.0']
+- Updated rdoc to '~> 6.2'
+- Updated rubocop to '~> 0.80.0'
+- Updated serverspec to '~> 2.41.5'
+- Updated yard to '~> 0.9.20'
+- Remediated any new warnings from updated rubocop
+
+
 ## [3.1.0] - 2019-03-04
 ### Added
 - check-azurerm-monitor-metric.rb: added `--aggregate_results aggregation_type TYPE` option that allows users to aggregate results returned from Azure DB query @MrMisa93

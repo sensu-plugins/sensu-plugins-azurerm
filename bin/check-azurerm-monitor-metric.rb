@@ -1,4 +1,6 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
+
 #
 # check-azurerm-core-usage
 #
@@ -30,8 +32,8 @@ require 'net/http'
 class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
   include SensuPluginsAzureRM
 
-  AZURE_API_VER = '2017-05-01-preview'.freeze
-  DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'.freeze
+  AZURE_API_VER = '2017-05-01-preview'
+  DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
   option :tenant_id,
          description: 'ARM Tenant ID. Either set ENV[\'ARM_TENANT_ID\'] or provide it as an option',
@@ -78,7 +80,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          default: ENV['ARM_SUBSCRIPTION_ID']
 
   option :resource_name,
-         description:  'The name of the resource.  If given, the resource namespace/type/group along with subscription id are also required.',
+         description: 'The name of the resource.  If given, the resource namespace/type/group along with subscription id are also required.',
          short: '-e NAME',
          long: '--resource-name NAME',
          default: ''
@@ -111,24 +113,24 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
 
   # example id: /subscriptions/576b7196-d42b-4b63-b696-af3ff33269a7/resourceGroups/test-group-1/providers/Microsoft.Network/virtualNetworkGateways/test-gateway
   option :resource_id,
-         description:  'The full id of the resource.  If given, the resource namespace/type/group along with subscription id are ignored.',
+         description: 'The full id of the resource.  If given, the resource namespace/type/group along with subscription id are ignored.',
          short: '-r ID',
          long: '--resource-id ID',
          default: ''
 
   option :metric,
-         description:  'The name of the metric',
+         description: 'The name of the metric',
          short: '-m ID',
          long: '--metric ID',
          required: true
 
   option :filter,
-         description:  "The filter applied to the metric.  See Azure docs for the syntax.  Note: This can be used to segment the return by dimensions, so that the script checks each dimension separately. eg APIName eq '*'",
+         description: "The filter applied to the metric.  See Azure docs for the syntax.  Note: This can be used to segment the return by dimensions, so that the script checks each dimension separately. eg APIName eq '*'",
          short: '-f FILTER',
          long: '--filter FILTER'
 
   option :request_aggregation,
-         description:  'Used as a parameter to the HTTP request sent to Azure.   This can be average, count, maximum, minimum, total',
+         description: 'Used as a parameter to the HTTP request sent to Azure.   This can be average, count, maximum, minimum, total',
          short: '-a aggregation',
          long: '--aggregation aggregation',
          default: 'average',
@@ -172,7 +174,7 @@ class CheckAzurermMonitorMetric < Sensu::Plugin::Check::CLI
          proc: proc { |val| val.chomp('/') }
 
   option :lookback_period,
-         description:  'The amount of time (in seconds) from the current time to look back when retrieving the metric.  This should be long enough to capture the last value submitted.',
+         description: 'The amount of time (in seconds) from the current time to look back when retrieving the metric.  This should be long enough to capture the last value submitted.',
          short: '-k PERIOD',
          long: '--look-back-period PERIOD',
          default: 600, # 10 min.  This should generally be enough time to capture the last value, without wasting API credits

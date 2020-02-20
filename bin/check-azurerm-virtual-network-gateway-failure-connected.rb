@@ -1,4 +1,6 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
+
 #
 # check-azurerm-virtual-network-gateway-failover-connected
 #
