@@ -16,7 +16,7 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 - Updated codeclimate-test-reporter to '~> 1.0'
 - Updated mixlib-shellout to ['~> 2.2', '< 3.1.0']
 - Updated rdoc to '~> 6.2'
-- Updated rubocop to '~> 0.80.0'
+- Updated rubocop to '~> 0.80.1'
 - Updated serverspec to '~> 2.41.5'
 - Updated yard to '~> 0.9.20'
 - Remediated any new warnings from updated rubocop
