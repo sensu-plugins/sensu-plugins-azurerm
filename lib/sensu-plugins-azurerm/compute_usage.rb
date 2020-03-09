@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SensuPluginsAzureRM
   class ComputeUsage
     def build_usage_operation_client(tenant_id, client_id, secret, subscription_id)

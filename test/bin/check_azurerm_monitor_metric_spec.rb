@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 ENV['ARM_TENANT_ID'] = 'armtenantid'
@@ -549,3 +551,4 @@ describe 'check monitor metric script' do
     allow(instance).to receive(:ok)
   end
 end
+# rubocop:enable Metrics/BlockLength

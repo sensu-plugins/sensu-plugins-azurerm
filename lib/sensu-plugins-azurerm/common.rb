@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SensuPluginsAzureRM
   class Common
     def retrieve_usage_stats(client, location, name)

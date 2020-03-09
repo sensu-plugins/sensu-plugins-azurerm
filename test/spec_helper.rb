@@ -1,4 +1,5 @@
 require 'codeclimate-test-reporter'
+# frozen_string_literal: true
 CodeClimate::TestReporter.start
 
 RSpec.configure do |c|

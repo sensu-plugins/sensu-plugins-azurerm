@@ -1,4 +1,7 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
+
+#
 #
 # check-azurerm-cores-f-usage
 #
@@ -104,7 +107,7 @@ class CheckAzureRMCoresFUsage < Sensu::Plugin::Check::CLI
 
     message = "Current usage: #{current_usage} of #{allowance} F Family Cores"
 
-    percentage_used = (current_usage.to_f / allowance.to_f) * 100
+    percentage_used = (current_usage.to_f / allowance) * 100
 
     if percentage_used >= critical_percentage
       critical message

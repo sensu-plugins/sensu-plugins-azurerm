@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SensuPluginsAzureRM
   class ServiceBusUsage
     def get_client(tenant_id, client_id, secret, subscription_id)

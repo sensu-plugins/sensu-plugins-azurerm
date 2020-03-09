@@ -1,4 +1,6 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
+
 #
 # metric-azurerm-service-bus-subscription-message-count
 #
