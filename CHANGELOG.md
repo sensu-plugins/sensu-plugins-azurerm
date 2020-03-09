@@ -6,6 +6,10 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 ## [Unreleased]
 
 
+## [4.0.1] - 2020-03-09
+### Changed
+- Fix for travis deploy of Bonsai asset build 
+
 ## [4.0.0] - 2020-03-09
 ### Added 
 - Added Bonsai pieces
@@ -118,7 +122,8 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/4.0.0..HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/4.0.1..HEAD
+[4.0.1]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/4.0.0..4.0.1
 [4.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/3.1.0..4.0.0
 [3.1.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/3.0.0..3.1.0
 [3.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/2.1.0..3.0.0
