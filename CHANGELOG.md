@@ -5,13 +5,17 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+
+## [4.0.0] - 2020-03-09
 ### Added 
 - Added Bonsai pieces
 - Added Assets to README
 
-### Changed
+### Breaking Changes
+- Bump `sensu-plugin` dependency to `~> 4.0` you can read the changelog entries for [4.0](https://github.com/sensu-plugins/sensu-plugin/blob/master/CHANGELOG.md#400---2018-02-17)
+
+### Changed 
 - Updated ms_rest_azure to ['>= 0.6.2', '< 0.12.0']
-- Updated sensu-plugin to ['~> 2.5', '< 5.0']
 - Updated bundler to '~> 2.1'
 - Updated codeclimate-test-reporter to '~> 1.0'
 - Updated mixlib-shellout to ['~> 2.2', '< 3.1.0']
@@ -114,7 +118,8 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/3.1.0..HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/4.0.0..HEAD
+[4.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/3.1.0..4.0.0
 [3.1.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/3.0.0..3.1.0
 [3.0.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/2.1.0..3.0.0
 [2.1.0]: https://github.com/sensu-plugins/sensu-plugins-azurerm/compare/2.0.0...2.1.0
