@@ -5,6 +5,8 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
+### Changed
+- Updated rake requirement from ~> 12.3 to ~> 13.0
 
 ## [4.0.1] - 2020-03-09
 ### Changed
